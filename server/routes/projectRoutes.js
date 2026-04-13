@@ -12,6 +12,8 @@ const {
 const { protect, adminOnly } = require("../middlewares/auth");
 const { globalLimiter, uploadLimiter } = require("../middlewares/rateLimiter");
 const { uploadSingle, handleMulterError } = require("../middlewares/uploadMiddleware");
+const { createProjectValidator, updateProjectValidator } = require("../validators/projectValidator");
+const validate = require("../middlewares/validate");
 
 const router = express.Router();
 
@@ -21,8 +23,8 @@ router.get("/", globalLimiter, getAllProjects);
 router.get("/admin/all", protect, adminOnly, getAdminProjects);
 router.get("/:slug", globalLimiter, getProjectBySlug);
 
-router.post("/", protect, adminOnly, createProject);
-router.put("/:id", protect, adminOnly, updateProject);
+router.post("/", protect, adminOnly, createProjectValidator, validate, createProject);
+router.put("/:id", protect, adminOnly, updateProjectValidator, validate, updateProject);
 router.delete("/:id", protect, adminOnly, deleteProject);
 
 router.post("/:id/image", protect, adminOnly, uploadLimiter, uploadSingle, handleMulterError, uploadProjectImage);
