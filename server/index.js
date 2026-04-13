@@ -10,6 +10,7 @@ const { globalLimiter } = require("./middlewares/rateLimiter");
 const errorHandler = require("./middlewares/errorHandler");
 const authRoutes = require("./routes/authRoutes");
 const projectRoutes = require("./routes/projectRoutes");
+const skillRoutes = require("./routes/skillRoutes");
 
 const app = express();
 
@@ -38,7 +39,7 @@ app.use("/api", globalLimiter);
 // API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
-// app.use("/api/skills", skillRoutes);
+app.use("/api/skills", skillRoutes);
 // app.use("/api/contact", contactRoutes);
 
 // Health check
