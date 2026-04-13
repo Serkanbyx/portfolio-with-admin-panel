@@ -87,7 +87,7 @@ const Navbar = () => {
                 {link.label}
                 {isActive && (
                   <motion.div
-                    layoutId="activeSection"
+                    layoutId="activeNav"
                     className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-6 bg-primary-400 rounded-full"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />

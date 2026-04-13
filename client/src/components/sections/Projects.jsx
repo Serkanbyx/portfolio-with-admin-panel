@@ -92,14 +92,15 @@ const Projects = () => {
 
         {/* Projects Content */}
         {!isLoading && !error && projects.length > 0 && (
-          <motion.div
-            variants={staggerContainer(0.15)}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-          >
+          <div>
             {/* Featured Projects */}
             {hasFeatured && (
-              <div className="mb-16">
+              <motion.div
+                variants={staggerContainer(0.15)}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                className="mb-16"
+              >
                 <p className="text-primary-400 text-sm font-mono tracking-wider uppercase mb-6">
                   Featured
                 </p>
@@ -113,12 +114,16 @@ const Projects = () => {
                     </motion.div>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             )}
 
             {/* Other Projects Grid */}
             {otherProjects.length > 0 && (
-              <div>
+              <motion.div
+                variants={staggerContainer(0.08)}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+              >
                 {hasFeatured && (
                   <p className="text-primary-400 text-sm font-mono tracking-wider uppercase mb-6">
                     Other Projects
@@ -131,9 +136,9 @@ const Projects = () => {
                     </motion.div>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             )}
-          </motion.div>
+          </div>
         )}
       </div>
     </SectionWrapper>

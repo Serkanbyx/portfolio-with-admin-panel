@@ -17,7 +17,7 @@ const SkillBar = ({ name, level, index = 0 }) => {
           className="h-full rounded-full bg-linear-to-r from-primary-600 to-primary-400 shadow-sm shadow-primary-500/30"
           initial={{ width: 0 }}
           animate={isInView ? { width: `${level}%` } : { width: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.1 }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.08 }}
         />
       </div>
     </div>

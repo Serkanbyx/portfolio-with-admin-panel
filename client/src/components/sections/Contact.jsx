@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import {
   FiMail,
   FiMapPin,
@@ -16,7 +16,13 @@ import SectionHeading from "../ui/SectionHeading";
 import GlassCard from "../ui/GlassCard";
 import Spinner from "../ui/Spinner";
 import { SOCIAL_LINKS } from "../../utils/constants";
-import { scaleIn } from "../../utils/animations";
+import {
+  scaleIn,
+  fadeInLeft,
+  fadeInRight,
+  fadeInUp,
+  staggerContainer,
+} from "../../utils/animations";
 import * as contactService from "../../services/contactService";
 
 const SOCIAL_ICON_MAP = {
@@ -113,6 +119,11 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const leftRef = useRef(null);
+  const rightRef = useRef(null);
+  const isLeftInView = useInView(leftRef, { once: true, margin: "-80px" });
+  const isRightInView = useInView(rightRef, { once: true, margin: "-80px" });
+
   useEffect(() => {
     if (!isSuccess) return;
     const timer = setTimeout(() => resetForm(), 5000);
@@ -186,7 +197,13 @@ const Contact = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
         {/* Left Column — Contact Info */}
-        <div className="lg:col-span-2">
+        <motion.div
+          ref={leftRef}
+          variants={fadeInLeft}
+          initial="hidden"
+          animate={isLeftInView ? "visible" : "hidden"}
+          className="lg:col-span-2"
+        >
           <p className="text-dark-300 leading-relaxed mb-8">
             I&apos;m always open to new opportunities, collaborations, and
             interesting projects. Feel free to reach out!
@@ -245,10 +262,16 @@ const Contact = () => {
               })}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Right Column — Contact Form */}
-        <div className="lg:col-span-3">
+        <motion.div
+          ref={rightRef}
+          variants={fadeInRight}
+          initial="hidden"
+          animate={isRightInView ? "visible" : "hidden"}
+          className="lg:col-span-3"
+        >
           <GlassCard padding="p-8">
             <AnimatePresence mode="wait">
               {isSuccess ? (
@@ -267,7 +290,7 @@ const Contact = () => {
               )}
             </AnimatePresence>
           </GlassCard>
-        </div>
+        </motion.div>
       </div>
     </SectionWrapper>
   );
@@ -285,47 +308,52 @@ const ContactForm = ({
 }) => (
   <motion.form
     key="contact-form"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
+    variants={staggerContainer(0.08)}
+    initial="hidden"
+    animate="visible"
     exit={{ opacity: 0 }}
     onSubmit={onSubmit}
     noValidate
     className="space-y-6"
   >
     {/* Name */}
-    <FormField
-      label="Your Name"
-      name="name"
-      type="text"
-      placeholder="John Doe"
-      value={formData.name}
-      error={errors.name}
-      isTouched={touched.name}
-      disabled={isSubmitting}
-      onChange={onChange}
-      onBlur={onBlur}
-      errors={errors}
-      touched={touched}
-    />
+    <motion.div variants={fadeInUp}>
+      <FormField
+        label="Your Name"
+        name="name"
+        type="text"
+        placeholder="John Doe"
+        value={formData.name}
+        error={errors.name}
+        isTouched={touched.name}
+        disabled={isSubmitting}
+        onChange={onChange}
+        onBlur={onBlur}
+        errors={errors}
+        touched={touched}
+      />
+    </motion.div>
 
     {/* Email */}
-    <FormField
-      label="Your Email"
-      name="email"
-      type="email"
-      placeholder="john@example.com"
-      value={formData.email}
-      error={errors.email}
-      isTouched={touched.email}
-      disabled={isSubmitting}
-      onChange={onChange}
-      onBlur={onBlur}
-      errors={errors}
-      touched={touched}
-    />
+    <motion.div variants={fadeInUp}>
+      <FormField
+        label="Your Email"
+        name="email"
+        type="email"
+        placeholder="john@example.com"
+        value={formData.email}
+        error={errors.email}
+        isTouched={touched.email}
+        disabled={isSubmitting}
+        onChange={onChange}
+        onBlur={onBlur}
+        errors={errors}
+        touched={touched}
+      />
+    </motion.div>
 
     {/* Message */}
-    <div>
+    <motion.div variants={fadeInUp}>
       <label htmlFor="message" className="text-sm font-medium text-dark-300 mb-2 block">
         Your Message
       </label>
@@ -346,27 +374,29 @@ const ContactForm = ({
           {formData.message.length}/{MESSAGE_MAX}
         </span>
       </div>
-    </div>
+    </motion.div>
 
     {/* Submit */}
-    <motion.button
-      type="submit"
-      disabled={!isFormValid || isSubmitting}
-      whileTap={{ scale: 0.98 }}
-      className="w-full bg-primary-600 hover:bg-primary-500 text-white py-3.5 rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-    >
-      {isSubmitting ? (
-        <>
-          <Spinner size="sm" />
-          <span>Sending...</span>
-        </>
-      ) : (
-        <>
-          <FiSend className="w-4 h-4" />
-          <span>Send Message</span>
-        </>
-      )}
-    </motion.button>
+    <motion.div variants={fadeInUp}>
+      <motion.button
+        type="submit"
+        disabled={!isFormValid || isSubmitting}
+        whileTap={{ scale: 0.98 }}
+        className="w-full bg-primary-600 hover:bg-primary-500 text-white py-3.5 rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+      >
+        {isSubmitting ? (
+          <>
+            <Spinner size="sm" />
+            <span>Sending...</span>
+          </>
+        ) : (
+          <>
+            <FiSend className="w-4 h-4" />
+            <span>Send Message</span>
+          </>
+        )}
+      </motion.button>
+    </motion.div>
   </motion.form>
 );
 
