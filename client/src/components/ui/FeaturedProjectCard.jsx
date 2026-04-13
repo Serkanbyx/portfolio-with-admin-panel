@@ -15,8 +15,8 @@ const FeaturedProjectCard = ({ project, index }) => {
   const isEven = index % 2 === 0;
 
   return (
-    <motion.div whileHover={{ y: -4, transition: { duration: 0.2 } }}>
-      <GlassCard padding="p-6 lg:p-8">
+    <motion.div className="group" whileHover={{ y: -4, transition: { duration: 0.2 } }}>
+      <GlassCard hover padding="p-6 lg:p-8">
         <div className="lg:grid lg:grid-cols-2 gap-8 items-center">
           {/* Image Side */}
           <div
@@ -66,7 +66,7 @@ const FeaturedProjectCard = ({ project, index }) => {
 
           {/* Content Side */}
           <div className="mt-6 lg:mt-0">
-            <h3 className="text-2xl font-bold text-dark-50 mb-3">
+            <h3 className="text-2xl font-bold text-dark-50 mb-3 group-hover:text-primary-400 transition-colors">
               {project.title}
             </h3>
 

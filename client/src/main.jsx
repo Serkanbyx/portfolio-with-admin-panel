@@ -16,17 +16,21 @@ createRoot(document.getElementById("root")).render(
           toastOptions={{
             duration: 3000,
             style: {
-              background: "#1e293b",
+              background: "rgba(30, 41, 59, 0.85)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
               color: "#f1f5f9",
               border: "1px solid rgba(148, 163, 184, 0.1)",
               borderRadius: "12px",
             },
             success: {
               iconTheme: { primary: "#22c55e", secondary: "#f1f5f9" },
+              style: { borderLeft: "3px solid #22c55e" },
             },
             error: {
               duration: 4000,
               iconTheme: { primary: "#ef4444", secondary: "#f1f5f9" },
+              style: { borderLeft: "3px solid #ef4444" },
             },
           }}
         />

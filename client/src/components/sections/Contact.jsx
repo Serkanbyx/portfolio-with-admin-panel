@@ -58,7 +58,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MESSAGE_MAX = 1000;
 
 const INPUT_BASE_CLASSES =
-  "w-full bg-dark-800/50 border rounded-xl px-4 py-3 text-dark-100 placeholder:text-dark-500 focus:ring-1 focus:outline-none transition-colors";
+  "w-full bg-dark-800/50 border rounded-xl px-4 py-3 text-dark-100 placeholder:text-dark-500 focus:ring-1 focus:outline-none transition-all duration-200";
 
 const getInputStateClasses = (fieldName, errors, touched) => {
   if (touched[fieldName] && errors[fieldName]) {
@@ -220,7 +220,7 @@ const Contact = () => {
                   {item.type === "link" ? (
                     <a
                       href={item.href}
-                      className="text-dark-300 hover:text-primary-400 transition-colors"
+                      className="text-dark-300 hover:text-primary-400 transition-colors link-hover"
                     >
                       {item.label}
                     </a>
@@ -253,7 +253,7 @@ const Contact = () => {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-dark-400 hover:text-primary-400 transition-colors"
+                    className="text-dark-400 hover:text-primary-400 hover:bg-primary-500/10 rounded-lg p-2 transition-colors duration-200"
                     aria-label={`Visit ${social.label} profile`}
                   >
                     <Icon className="w-6 h-6" />
@@ -366,7 +366,7 @@ const ContactForm = ({
         disabled={isSubmitting}
         onChange={onChange}
         onBlur={onBlur}
-        className={`${INPUT_BASE_CLASSES} ${getInputStateClasses("message", errors, touched)} resize-none`}
+        className={`${INPUT_BASE_CLASSES} ${getInputStateClasses("message", errors, touched)} resize-y`}
       />
       <div className="flex justify-between items-center mt-1">
         <InlineError show={touched.message && errors.message} message={errors.message} />
@@ -381,7 +381,9 @@ const ContactForm = ({
       <motion.button
         type="submit"
         disabled={!isFormValid || isSubmitting}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.97 }}
+        transition={{ type: "spring", stiffness: 400, damping: 17 }}
         className="w-full bg-primary-600 hover:bg-primary-500 text-white py-3.5 rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {isSubmitting ? (
@@ -467,12 +469,14 @@ const SuccessMessage = ({ onReset }) => (
       Thank you for reaching out. I&apos;ll get back to you soon.
     </p>
 
-    <button
+    <motion.button
       onClick={onReset}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
       className="text-primary-400 hover:text-primary-300 font-medium transition-colors"
     >
       Send Another
-    </button>
+    </motion.button>
   </motion.div>
 );
 

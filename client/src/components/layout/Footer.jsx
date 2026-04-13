@@ -26,7 +26,7 @@ const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-dark-400 hover:text-primary-400 transition-colors"
+                  className="text-dark-400 hover:text-primary-400 hover:bg-primary-500/10 rounded-lg p-2 transition-colors duration-200"
                   aria-label={`Visit ${social.label} profile`}
                 >
                   <Icon className="w-5 h-5" />

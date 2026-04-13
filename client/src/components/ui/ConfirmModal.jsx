@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Spinner from "./Spinner";
 
+const springTransition = { type: "spring", stiffness: 400, damping: 17 };
+
 const CONFIRM_COLORS = {
   red: "bg-red-500 hover:bg-red-600 focus:ring-red-500/30",
   primary: "bg-primary-500 hover:bg-primary-600 focus:ring-primary-500/30",
@@ -86,19 +88,24 @@ const ConfirmModal = ({
             </p>
 
             <div className="flex items-center justify-end gap-3">
-              <button
+              <motion.button
                 ref={cancelRef}
                 type="button"
                 onClick={onClose}
                 disabled={isLoading}
+                whileTap={{ scale: 0.97 }}
+                transition={springTransition}
                 className="px-4 py-2 rounded-lg text-sm font-medium text-dark-300 hover:text-dark-50 hover:bg-dark-700/50 transition-colors disabled:opacity-50"
               >
                 Cancel
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 type="button"
                 onClick={onConfirm}
                 disabled={isLoading}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                transition={springTransition}
                 className={`
                   px-4 py-2 rounded-lg text-sm font-medium text-white
                   transition-colors focus:ring-2 disabled:opacity-50
@@ -108,7 +115,7 @@ const ConfirmModal = ({
               >
                 {isLoading && <Spinner size="sm" />}
                 {confirmText}
-              </button>
+              </motion.button>
             </div>
           </motion.div>
         </motion.div>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useRef } from "react";
 import {
   FiLayout,
@@ -86,83 +86,120 @@ const Skills = () => {
       />
 
       <div ref={sectionRef}>
-        {/* Loading State */}
-        {isLoading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <Skeleton key={`skill-skel-${i}`} variant="card" />
-            ))}
-          </div>
-        )}
-
-        {/* Error State */}
-        {!isLoading && error && (
-          <GlassCard className="text-center py-12">
-            <p className="text-red-400 mb-4">{error}</p>
-            <button
-              onClick={fetchSkills}
-              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-500 text-white text-sm px-5 py-2.5 rounded-lg transition-colors"
+        <AnimatePresence mode="wait">
+          {/* Loading State */}
+          {isLoading && (
+            <motion.div
+              key="skills-skeleton"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              <FiRefreshCw size={14} />
-              Retry
-            </button>
-          </GlassCard>
-        )}
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={`skill-skel-${i}`} variant="card" />
+              ))}
+            </motion.div>
+          )}
 
-        {/* Empty State */}
-        {!isLoading && !error && skills.length === 0 && (
-          <GlassCard className="text-center py-16">
-            <FiCode className="mx-auto text-dark-500 mb-4" size={48} />
-            <p className="text-dark-400">Skills section coming soon!</p>
-          </GlassCard>
-        )}
+          {/* Error State */}
+          {!isLoading && error && (
+            <motion.div
+              key="skills-error"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <GlassCard className="text-center py-12">
+                <p className="text-red-400 mb-4">{error}</p>
+                <motion.button
+                  onClick={fetchSkills}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-500 text-white text-sm px-5 py-2.5 rounded-lg transition-colors"
+                >
+                  <FiRefreshCw size={14} />
+                  Retry
+                </motion.button>
+              </GlassCard>
+            </motion.div>
+          )}
 
-        {/* Skills Content */}
-        {!isLoading && !error && skills.length > 0 && (
-          <motion.div
-            variants={staggerContainer(0.15)}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {activeCategories.map((category) => {
-              const Icon = ICON_MAP[category.icon] || FiBox;
-              const categorySkills = groupedSkills[category.value];
-              const bgColor = COLOR_BG_MAP[category.color] || "bg-gray-400/10";
+          {/* Empty State */}
+          {!isLoading && !error && skills.length === 0 && (
+            <motion.div
+              key="skills-empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <GlassCard className="text-center py-16">
+                <FiCode className="mx-auto text-dark-500 mb-4" size={48} />
+                <p className="text-dark-400">Skills section coming soon!</p>
+              </GlassCard>
+            </motion.div>
+          )}
 
-              return (
-                <motion.div key={category.value} variants={fadeInUp}>
-                  <GlassCard hover>
-                    <div className="flex items-center gap-3 mb-6">
-                      <div
-                        className={`w-10 h-10 rounded-lg ${bgColor} flex items-center justify-center`}
-                      >
-                        <Icon className={category.color} size={20} />
-                      </div>
-                      <h3 className="text-lg font-semibold text-dark-100">
-                        {category.label}
-                      </h3>
-                      <span className="text-xs text-dark-500 bg-dark-800 rounded-full px-2 py-0.5">
-                        {categorySkills.length}
-                      </span>
-                    </div>
+          {/* Skills Content */}
+          {!isLoading && !error && skills.length > 0 && (
+            <motion.div
+              key="skills-content"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <motion.div
+                variants={staggerContainer(0.15)}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              >
+                {activeCategories.map((category) => {
+                  const Icon = ICON_MAP[category.icon] || FiBox;
+                  const categorySkills = groupedSkills[category.value];
+                  const bgColor =
+                    COLOR_BG_MAP[category.color] || "bg-gray-400/10";
 
-                    <div className="space-y-4">
-                      {categorySkills.map((skill, index) => (
-                        <SkillBar
-                          key={skill._id}
-                          name={skill.name}
-                          level={skill.level}
-                          index={index}
-                        />
-                      ))}
-                    </div>
-                  </GlassCard>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        )}
+                  return (
+                    <motion.div key={category.value} variants={fadeInUp}>
+                      <GlassCard hover>
+                        <div className="flex items-center gap-3 mb-6">
+                          <div
+                            className={`w-10 h-10 rounded-lg ${bgColor} flex items-center justify-center`}
+                          >
+                            <Icon className={category.color} size={20} />
+                          </div>
+                          <h3 className="text-lg font-semibold text-dark-100">
+                            {category.label}
+                          </h3>
+                          <span className="text-xs text-dark-500 bg-dark-800 rounded-full px-2 py-0.5">
+                            {categorySkills.length}
+                          </span>
+                        </div>
+
+                        <div className="space-y-4">
+                          {categorySkills.map((skill, index) => (
+                            <SkillBar
+                              key={skill._id}
+                              name={skill.name}
+                              level={skill.level}
+                              index={index}
+                            />
+                          ))}
+                        </div>
+                      </GlassCard>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </SectionWrapper>
   );

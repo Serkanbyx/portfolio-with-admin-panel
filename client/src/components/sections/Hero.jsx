@@ -107,20 +107,26 @@ const Hero = () => {
 
         {/* CTA Buttons */}
         <motion.div className="flex gap-4 justify-center mb-12" variants={fadeInUp}>
-          <button
+          <motion.button
             onClick={() => handleScrollTo("#projects")}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
             className="flex items-center gap-2 bg-primary-600 hover:bg-primary-500 text-white px-8 py-3 rounded-xl font-medium transition-all hover:shadow-lg hover:shadow-primary-500/25 cursor-pointer"
           >
             <FiArrowDown className="text-lg" />
             View Projects
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             onClick={() => handleScrollTo("#contact")}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
             className="flex items-center gap-2 border border-dark-600 hover:border-primary-500 text-dark-200 hover:text-primary-400 px-8 py-3 rounded-xl font-medium transition-all cursor-pointer"
           >
             <FiMail className="text-lg" />
             Contact Me
-          </button>
+          </motion.button>
         </motion.div>
 
         {/* Social Icons */}
@@ -134,7 +140,7 @@ const Hero = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={link.label}
-                className="text-dark-500 hover:text-primary-400 transition-colors text-xl"
+                className="text-dark-500 hover:text-primary-400 hover:bg-primary-500/10 rounded-lg p-2 transition-colors duration-200 text-xl"
               >
                 {Icon && <Icon />}
               </a>
