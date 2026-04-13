@@ -1,1 +1,449 @@
-// Contact section component
+import { useState, useCallback, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FiMail,
+  FiMapPin,
+  FiCheckCircle,
+  FiSend,
+  FiGithub,
+  FiLinkedin,
+  FiTwitter,
+} from "react-icons/fi";
+import { toast } from "react-hot-toast";
+
+import SectionWrapper from "../ui/SectionWrapper";
+import SectionHeading from "../ui/SectionHeading";
+import GlassCard from "../ui/GlassCard";
+import Spinner from "../ui/Spinner";
+import { SOCIAL_LINKS } from "../../utils/constants";
+import { scaleIn } from "../../utils/animations";
+import * as contactService from "../../services/contactService";
+
+const SOCIAL_ICON_MAP = {
+  FiGithub,
+  FiLinkedin,
+  FiTwitter,
+};
+
+const CONTACT_INFO = [
+  {
+    icon: FiMail,
+    label: "your.email@example.com",
+    href: "mailto:your.email@example.com",
+    type: "link",
+  },
+  {
+    icon: FiMapPin,
+    label: "Istanbul, Turkey",
+    type: "text",
+  },
+  {
+    icon: FiCheckCircle,
+    label: "Available for freelance",
+    type: "availability",
+  },
+];
+
+const INITIAL_FORM_DATA = { name: "", email: "", message: "" };
+const INITIAL_ERRORS = { name: "", email: "", message: "" };
+const INITIAL_TOUCHED = { name: false, email: false, message: false };
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MESSAGE_MAX = 1000;
+
+const INPUT_BASE_CLASSES =
+  "w-full bg-dark-800/50 border rounded-xl px-4 py-3 text-dark-100 placeholder:text-dark-500 focus:ring-1 focus:outline-none transition-colors";
+
+const getInputStateClasses = (fieldName, errors, touched) => {
+  if (touched[fieldName] && errors[fieldName]) {
+    return "border-error-500 focus:border-error-500 focus:ring-error-500/50";
+  }
+  if (touched[fieldName] && !errors[fieldName]) {
+    return "border-success-500/50 focus:border-primary-500 focus:ring-primary-500/50";
+  }
+  return "border-dark-700 focus:border-primary-500 focus:ring-primary-500/50";
+};
+
+const validateField = (name, value) => {
+  switch (name) {
+    case "name":
+      if (!value.trim()) return "Name is required";
+      if (value.trim().length < 2) return "Name must be at least 2 characters";
+      return "";
+    case "email":
+      if (!value.trim()) return "Email is required";
+      if (!EMAIL_REGEX.test(value)) return "Please enter a valid email";
+      return "";
+    case "message":
+      if (!value.trim()) return "Message is required";
+      if (value.trim().length < 10)
+        return "Message must be at least 10 characters";
+      return "";
+    default:
+      return "";
+  }
+};
+
+const errorAnimation = {
+  hidden: { opacity: 0, height: 0, y: -4 },
+  visible: {
+    opacity: 1,
+    height: "auto",
+    y: 0,
+    transition: { duration: 0.2, ease: "easeOut" },
+  },
+  exit: {
+    opacity: 0,
+    height: 0,
+    y: -4,
+    transition: { duration: 0.15, ease: "easeIn" },
+  },
+};
+
+const getCharCountColor = (length) => {
+  if (length >= MESSAGE_MAX) return "text-error-500";
+  if (length >= 900) return "text-warning-500";
+  return "text-dark-500";
+};
+
+const Contact = () => {
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
+  const [errors, setErrors] = useState(INITIAL_ERRORS);
+  const [touched, setTouched] = useState(INITIAL_TOUCHED);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    if (!isSuccess) return;
+    const timer = setTimeout(() => resetForm(), 5000);
+    return () => clearTimeout(timer);
+  }, [isSuccess]);
+
+  const isFormValid =
+    Object.values(errors).every((e) => e === "") &&
+    Object.values(formData).every((v) => v.trim() !== "");
+
+  const handleChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      if (name === "message" && value.length > MESSAGE_MAX) return;
+
+      setFormData((prev) => ({ ...prev, [name]: value }));
+
+      if (touched[name]) {
+        setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+      }
+    },
+    [touched],
+  );
+
+  const handleBlur = useCallback((e) => {
+    const { name, value } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+  }, []);
+
+  const resetForm = () => {
+    setFormData(INITIAL_FORM_DATA);
+    setErrors(INITIAL_ERRORS);
+    setTouched(INITIAL_TOUCHED);
+    setIsSuccess(false);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const allTouched = { name: true, email: true, message: true };
+    setTouched(allTouched);
+
+    const newErrors = {
+      name: validateField("name", formData.name),
+      email: validateField("email", formData.email),
+      message: validateField("message", formData.message),
+    };
+    setErrors(newErrors);
+
+    if (Object.values(newErrors).some((err) => err !== "")) return;
+
+    setIsSubmitting(true);
+    try {
+      await contactService.sendMessage(formData);
+      setIsSuccess(true);
+      toast.success("Message sent successfully!");
+    } catch (error) {
+      toast.error(error.message || "Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <SectionWrapper id="contact">
+      <SectionHeading
+        title="Get In Touch"
+        subtitle="Have a project in mind? Let's talk about it."
+      />
+
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+        {/* Left Column — Contact Info */}
+        <div className="lg:col-span-2">
+          <p className="text-dark-300 leading-relaxed mb-8">
+            I&apos;m always open to new opportunities, collaborations, and
+            interesting projects. Feel free to reach out!
+          </p>
+
+          <div className="space-y-4">
+            {CONTACT_INFO.map((item) => (
+              <GlassCard key={item.label} padding="p-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-primary-500/10 text-primary-400 flex items-center justify-center">
+                    <item.icon className="w-5 h-5" />
+                  </div>
+
+                  {item.type === "link" ? (
+                    <a
+                      href={item.href}
+                      className="text-dark-300 hover:text-primary-400 transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                  ) : item.type === "availability" ? (
+                    <div className="flex items-center gap-2">
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+                        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
+                      </span>
+                      <span className="text-dark-300">{item.label}</span>
+                    </div>
+                  ) : (
+                    <span className="text-dark-300">{item.label}</span>
+                  )}
+                </div>
+              </GlassCard>
+            ))}
+          </div>
+
+          {/* Social Links */}
+          <div className="mt-8">
+            <p className="text-dark-500 text-sm mb-3">Find me on</p>
+            <div className="flex items-center gap-4">
+              {SOCIAL_LINKS.map((social) => {
+                const Icon = SOCIAL_ICON_MAP[social.icon];
+                if (!Icon) return null;
+                return (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-dark-400 hover:text-primary-400 transition-colors"
+                    aria-label={`Visit ${social.label} profile`}
+                  >
+                    <Icon className="w-6 h-6" />
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column — Contact Form */}
+        <div className="lg:col-span-3">
+          <GlassCard padding="p-8">
+            <AnimatePresence mode="wait">
+              {isSuccess ? (
+                <SuccessMessage onReset={resetForm} />
+              ) : (
+                <ContactForm
+                  formData={formData}
+                  errors={errors}
+                  touched={touched}
+                  isSubmitting={isSubmitting}
+                  isFormValid={isFormValid}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  onSubmit={handleSubmit}
+                />
+              )}
+            </AnimatePresence>
+          </GlassCard>
+        </div>
+      </div>
+    </SectionWrapper>
+  );
+};
+
+const ContactForm = ({
+  formData,
+  errors,
+  touched,
+  isSubmitting,
+  isFormValid,
+  onChange,
+  onBlur,
+  onSubmit,
+}) => (
+  <motion.form
+    key="contact-form"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    onSubmit={onSubmit}
+    noValidate
+    className="space-y-6"
+  >
+    {/* Name */}
+    <FormField
+      label="Your Name"
+      name="name"
+      type="text"
+      placeholder="John Doe"
+      value={formData.name}
+      error={errors.name}
+      isTouched={touched.name}
+      disabled={isSubmitting}
+      onChange={onChange}
+      onBlur={onBlur}
+      errors={errors}
+      touched={touched}
+    />
+
+    {/* Email */}
+    <FormField
+      label="Your Email"
+      name="email"
+      type="email"
+      placeholder="john@example.com"
+      value={formData.email}
+      error={errors.email}
+      isTouched={touched.email}
+      disabled={isSubmitting}
+      onChange={onChange}
+      onBlur={onBlur}
+      errors={errors}
+      touched={touched}
+    />
+
+    {/* Message */}
+    <div>
+      <label htmlFor="message" className="text-sm font-medium text-dark-300 mb-2 block">
+        Your Message
+      </label>
+      <textarea
+        id="message"
+        name="message"
+        rows={5}
+        placeholder="Tell me about your project..."
+        value={formData.message}
+        disabled={isSubmitting}
+        onChange={onChange}
+        onBlur={onBlur}
+        className={`${INPUT_BASE_CLASSES} ${getInputStateClasses("message", errors, touched)} resize-none`}
+      />
+      <div className="flex justify-between items-center mt-1">
+        <InlineError show={touched.message && errors.message} message={errors.message} />
+        <span className={`text-xs ${getCharCountColor(formData.message.length)}`}>
+          {formData.message.length}/{MESSAGE_MAX}
+        </span>
+      </div>
+    </div>
+
+    {/* Submit */}
+    <motion.button
+      type="submit"
+      disabled={!isFormValid || isSubmitting}
+      whileTap={{ scale: 0.98 }}
+      className="w-full bg-primary-600 hover:bg-primary-500 text-white py-3.5 rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+    >
+      {isSubmitting ? (
+        <>
+          <Spinner size="sm" />
+          <span>Sending...</span>
+        </>
+      ) : (
+        <>
+          <FiSend className="w-4 h-4" />
+          <span>Send Message</span>
+        </>
+      )}
+    </motion.button>
+  </motion.form>
+);
+
+const FormField = ({
+  label,
+  name,
+  type,
+  placeholder,
+  value,
+  disabled,
+  onChange,
+  onBlur,
+  errors,
+  touched,
+}) => (
+  <div>
+    <label htmlFor={name} className="text-sm font-medium text-dark-300 mb-2 block">
+      {label}
+    </label>
+    <input
+      id={name}
+      name={name}
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      disabled={disabled}
+      onChange={onChange}
+      onBlur={onBlur}
+      className={`${INPUT_BASE_CLASSES} ${getInputStateClasses(name, errors, touched)}`}
+    />
+    <InlineError show={touched[name] && errors[name]} message={errors[name]} />
+  </div>
+);
+
+const InlineError = ({ show, message }) => (
+  <AnimatePresence>
+    {show && (
+      <motion.p
+        variants={errorAnimation}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        className="text-error-500 text-xs mt-1"
+      >
+        {message}
+      </motion.p>
+    )}
+  </AnimatePresence>
+);
+
+const SuccessMessage = ({ onReset }) => (
+  <motion.div
+    key="success-message"
+    initial="hidden"
+    animate="visible"
+    exit={{ opacity: 0 }}
+    className="flex flex-col items-center justify-center py-12 text-center"
+  >
+    <motion.div
+      variants={scaleIn}
+      className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-6"
+    >
+      <FiCheckCircle className="w-8 h-8 text-green-500" />
+    </motion.div>
+
+    <h3 className="text-2xl font-bold text-dark-100 mb-2">Message Sent!</h3>
+    <p className="text-dark-400 mb-8">
+      Thank you for reaching out. I&apos;ll get back to you soon.
+    </p>
+
+    <button
+      onClick={onReset}
+      className="text-primary-400 hover:text-primary-300 font-medium transition-colors"
+    >
+      Send Another
+    </button>
+  </motion.div>
+);
+
+export default Contact;
