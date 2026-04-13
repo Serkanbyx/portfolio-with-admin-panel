@@ -1,0 +1,1 @@
+// Skill progress bar component
