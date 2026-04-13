@@ -1,5 +1,5 @@
 const Project = require("../models/Project");
-const cloudinary = require("../utils/cloudinary");
+const { cloudinary, uploadImage, deleteImage } = require("../utils/cloudinary");
 
 const ALLOWED_FIELDS = [
   "title",
@@ -143,6 +143,64 @@ const deleteProject = async (req, res, next) => {
   }
 };
 
+const uploadProjectImage = async (req, res, next) => {
+  try {
+    const project = await Project.findById(req.params.id);
+
+    if (!project) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Project not found" });
+    }
+
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No image file provided" });
+    }
+
+    if (project.image?.publicId) {
+      await deleteImage(project.image.publicId);
+    }
+
+    const { url, publicId } = await uploadImage(req.file.buffer, "projects");
+
+    project.image = { url, publicId };
+    await project.save();
+
+    res.json({ success: true, data: project });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteProjectImage = async (req, res, next) => {
+  try {
+    const project = await Project.findById(req.params.id);
+
+    if (!project) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Project not found" });
+    }
+
+    if (!project.image?.publicId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Project has no image" });
+    }
+
+    await deleteImage(project.image.publicId);
+
+    project.image = {};
+    await project.save();
+
+    res.json({ success: true, data: project });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllProjects,
   getProjectBySlug,
@@ -150,4 +208,6 @@ module.exports = {
   createProject,
   updateProject,
   deleteProject,
+  uploadProjectImage,
+  deleteProjectImage,
 };
