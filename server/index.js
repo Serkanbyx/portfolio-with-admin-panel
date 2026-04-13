@@ -11,6 +11,7 @@ const errorHandler = require("./middlewares/errorHandler");
 const authRoutes = require("./routes/authRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 const skillRoutes = require("./routes/skillRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 const app = express();
 
@@ -40,7 +41,7 @@ app.use("/api", globalLimiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/skills", skillRoutes);
-// app.use("/api/contact", contactRoutes);
+app.use("/api/contact", contactRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {
