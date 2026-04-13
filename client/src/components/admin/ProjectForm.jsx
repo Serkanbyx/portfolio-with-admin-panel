@@ -482,9 +482,9 @@ const ProjectForm = ({ isOpen, onClose, editingProject, onSuccess }) => {
 
                 {/* Image Upload */}
                 <div>
-                  <label className="block text-sm font-medium text-dark-300 mb-1.5">
+                  <span className="block text-sm font-medium text-dark-300 mb-1.5">
                     Project Image
-                  </label>
+                  </span>
                   <ImageUploader
                     currentImage={currentImage}
                     onFileSelect={handleImageSelect}

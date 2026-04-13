@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { FiPlus } from "react-icons/fi";
+import { FiPlus, FiAlertCircle, FiRefreshCw } from "react-icons/fi";
 
 import GlassCard from "../components/ui/GlassCard";
 import Skeleton from "../components/ui/Skeleton";
@@ -29,25 +29,28 @@ const AdminDashboardPage = () => {
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const [projectsRes, skillsRes] = await Promise.all([
+        projectService.getAdminProjects(),
+        skillService.getSkills(),
+      ]);
+      setProjects(projectsRes.data);
+      setSkills(skillsRes.data);
+    } catch (err) {
+      setError(err.message || "Failed to load dashboard data");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [projectsRes, skillsRes] = await Promise.all([
-          projectService.getAdminProjects(),
-          skillService.getSkills(),
-        ]);
-        setProjects(projectsRes.data);
-        setSkills(skillsRes.data);
-      } catch (error) {
-        console.error("Failed to fetch dashboard data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const recentProjects = useMemo(
     () =>
@@ -69,39 +72,58 @@ const AdminDashboardPage = () => {
         <p className="text-dark-400 mt-1">Welcome back! 👋</p>
       </div>
 
+      {/* Error State */}
+      {!isLoading && error && (
+        <GlassCard className="text-center py-12 mt-6 mb-8">
+          <FiAlertCircle className="mx-auto text-red-400 mb-4" size={40} />
+          <p className="text-red-400 mb-4">{error}</p>
+          <button
+            onClick={fetchData}
+            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-500 text-white text-sm px-5 py-2.5 rounded-lg transition-colors"
+          >
+            <FiRefreshCw size={14} />
+            Retry
+          </button>
+        </GlassCard>
+      )}
+
       {/* Stats Cards */}
-      {isLoading ? (
+      {isLoading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 mt-6">
           {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className="h-28 w-full rounded-2xl" />
           ))}
         </div>
-      ) : (
+      )}
+
+      {!isLoading && !error && (
         <div className="mt-6">
           <AdminStats projects={projects} skills={skills} />
         </div>
       )}
 
       {/* Quick Actions */}
-      <div className="flex gap-3 mb-8">
-        <Link
-          to="/admin/projects?action=new"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-500 text-white font-medium text-sm hover:bg-primary-600 transition-colors"
-        >
-          <FiPlus className="w-4 h-4" />
-          New Project
-        </Link>
-        <Link
-          to="/admin/skills?action=new"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-dark-600 text-dark-200 font-medium text-sm hover:bg-dark-800 transition-colors"
-        >
-          <FiPlus className="w-4 h-4" />
-          New Skill
-        </Link>
-      </div>
+      {!error && (
+        <div className="flex gap-3 mb-8">
+          <Link
+            to="/admin/projects?action=new"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-500 text-white font-medium text-sm hover:bg-primary-600 transition-colors"
+          >
+            <FiPlus className="w-4 h-4" />
+            New Project
+          </Link>
+          <Link
+            to="/admin/skills?action=new"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-dark-600 text-dark-200 font-medium text-sm hover:bg-dark-800 transition-colors"
+          >
+            <FiPlus className="w-4 h-4" />
+            New Skill
+          </Link>
+        </div>
+      )}
 
       {/* Recent Projects */}
-      {isLoading ? (
+      {isLoading && (
         <GlassCard>
           <div className="space-y-4">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -109,7 +131,9 @@ const AdminDashboardPage = () => {
             ))}
           </div>
         </GlassCard>
-      ) : (
+      )}
+
+      {!isLoading && !error && (
         <GlassCard>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-dark-50">

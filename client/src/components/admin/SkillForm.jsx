@@ -259,6 +259,7 @@ const SkillForm = ({ isOpen, onClose, editingSkill, onSuccess }) => {
                       max={100}
                       value={formData.level}
                       onChange={handleLevelChange}
+                      aria-label="Level value"
                       className="w-16 px-2 py-2 rounded-lg bg-dark-800 border border-dark-700 text-dark-50 text-center font-mono text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
                     />
                   </div>

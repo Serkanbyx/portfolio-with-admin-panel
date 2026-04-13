@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useRef } from "react";
-import { FiFolder, FiRefreshCw } from "react-icons/fi";
+import { FiFolder, FiRefreshCw, FiAlertCircle } from "react-icons/fi";
 import SectionWrapper from "../ui/SectionWrapper";
 import SectionHeading from "../ui/SectionHeading";
 import GlassCard from "../ui/GlassCard";
@@ -63,11 +63,9 @@ const Projects = () => {
               transition={{ duration: 0.3 }}
               className="space-y-8"
             >
-              {Array.from({ length: 3 }).map((_, i) => (
-                <Skeleton key={`feat-skel-${i}`} variant="card" />
-              ))}
+              <Skeleton variant="card" className="h-80" />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-                {Array.from({ length: 6 }).map((_, i) => (
+                {Array.from({ length: 3 }).map((_, i) => (
                   <Skeleton key={`grid-skel-${i}`} variant="card" />
                 ))}
               </div>
@@ -84,7 +82,8 @@ const Projects = () => {
               transition={{ duration: 0.3 }}
             >
               <GlassCard className="text-center py-12">
-                <p className="text-red-400 mb-4">{error}</p>
+                <FiAlertCircle className="mx-auto text-red-400 mb-4" size={48} />
+                <p className="text-red-400 mb-4">Unable to load projects</p>
                 <motion.button
                   onClick={fetchProjects}
                   whileHover={{ scale: 1.02 }}

@@ -10,6 +10,7 @@ import {
   FiBox,
   FiRefreshCw,
   FiCode,
+  FiAlertCircle,
 } from "react-icons/fi";
 import SectionWrapper from "../ui/SectionWrapper";
 import SectionHeading from "../ui/SectionHeading";
@@ -98,7 +99,23 @@ const Skills = () => {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
               {Array.from({ length: 3 }).map((_, i) => (
-                <Skeleton key={`skill-skel-${i}`} variant="card" />
+                <div key={`skill-skel-${i}`} className="glass-card rounded-2xl p-6">
+                  <div className="flex items-center gap-3 mb-6">
+                    <Skeleton className="w-10 h-10 rounded-lg" />
+                    <Skeleton className="h-5 w-24 rounded" />
+                  </div>
+                  <div className="space-y-4">
+                    {Array.from({ length: 4 }).map((__, j) => (
+                      <div key={j} className="space-y-2">
+                        <div className="flex justify-between">
+                          <Skeleton className="h-3 w-20 rounded" />
+                          <Skeleton className="h-3 w-8 rounded" />
+                        </div>
+                        <Skeleton className="h-2 w-full rounded-full" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
               ))}
             </motion.div>
           )}
@@ -113,7 +130,8 @@ const Skills = () => {
               transition={{ duration: 0.3 }}
             >
               <GlassCard className="text-center py-12">
-                <p className="text-red-400 mb-4">{error}</p>
+                <FiAlertCircle className="mx-auto text-red-400 mb-4" size={48} />
+                <p className="text-red-400 mb-4">Unable to load skills</p>
                 <motion.button
                   onClick={fetchSkills}
                   whileHover={{ scale: 1.02 }}

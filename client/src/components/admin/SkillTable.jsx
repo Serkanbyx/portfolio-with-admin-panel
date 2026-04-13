@@ -58,7 +58,7 @@ const SkillTable = ({ skills, isLoading, onEdit, onDelete, onAddNew }) => {
           No skills added yet
         </h3>
         <p className="text-dark-400 text-sm mb-6">
-          Add your first skill to get started!
+          Add your first skill to showcase your expertise.
         </p>
         <button
           onClick={onAddNew}
