@@ -1,1 +1,13 @@
-// Home page — renders all portfolio sections
+import Hero from "../components/sections/Hero";
+import About from "../components/sections/About";
+
+const HomePage = () => {
+  return (
+    <>
+      <Hero />
+      <About />
+    </>
+  );
+};
+
+export default HomePage;
