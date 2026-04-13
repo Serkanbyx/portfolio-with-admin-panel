@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiMenu, FiX } from "react-icons/fi";
-import { FiGithub, FiLinkedin, FiTwitter } from "react-icons/fi";
+import { FiMenu, FiX, FiGithub, FiLinkedin, FiTwitter } from "react-icons/fi";
 import GradientText from "../ui/GradientText";
 import useScrollSpy from "../../hooks/useScrollSpy";
 import { NAV_LINKS, SOCIAL_LINKS } from "../../utils/constants";
