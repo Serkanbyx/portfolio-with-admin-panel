@@ -8,6 +8,7 @@ const config = require("./config/env");
 const connectDB = require("./config/db");
 const { globalLimiter } = require("./middlewares/rateLimiter");
 const errorHandler = require("./middlewares/errorHandler");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -33,8 +34,8 @@ app.use(hpp());
 // Global rate limiter
 app.use("/api", globalLimiter);
 
-// API routes (will be implemented in later steps)
-// app.use("/api/auth", authRoutes);
+// API routes
+app.use("/api/auth", authRoutes);
 // app.use("/api/projects", projectRoutes);
 // app.use("/api/skills", skillRoutes);
 // app.use("/api/contact", contactRoutes);
