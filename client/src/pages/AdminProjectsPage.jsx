@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { FiPlus } from "react-icons/fi";
 
 import ProjectTable from "../components/admin/ProjectTable";
+import ProjectForm from "../components/admin/ProjectForm";
 import * as projectService from "../services/projectService";
 
 const AdminProjectsPage = () => {
@@ -95,6 +96,16 @@ const AdminProjectsPage = () => {
         onDelete={handleDelete}
         onToggleFeatured={handleToggleFeatured}
         onAddNew={handleAddNew}
+      />
+
+      <ProjectForm
+        isOpen={isFormOpen}
+        onClose={() => {
+          setIsFormOpen(false);
+          setEditingProject(null);
+        }}
+        editingProject={editingProject}
+        onSuccess={fetchProjects}
       />
     </>
   );
