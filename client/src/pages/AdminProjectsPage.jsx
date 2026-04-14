@@ -19,7 +19,7 @@ const AdminProjectsPage = () => {
     try {
       setIsLoading(true);
       const res = await projectService.getAdminProjects();
-      setProjects(res.data);
+      setProjects(res.data?.data || []);
     } catch (error) {
       toast.error("Failed to load projects");
       console.error("Failed to fetch projects:", error);

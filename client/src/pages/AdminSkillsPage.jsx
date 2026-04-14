@@ -19,7 +19,7 @@ const AdminSkillsPage = () => {
     try {
       setIsLoading(true);
       const res = await skillService.getSkills();
-      setSkills(res.data);
+      setSkills(res.data?.data || []);
     } catch (error) {
       toast.error("Failed to load skills");
       console.error("Failed to fetch skills:", error);

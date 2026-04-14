@@ -39,8 +39,8 @@ const AdminDashboardPage = () => {
         projectService.getAdminProjects(),
         skillService.getSkills(),
       ]);
-      setProjects(projectsRes.data);
-      setSkills(skillsRes.data);
+      setProjects(projectsRes.data?.data || []);
+      setSkills(skillsRes.data?.data || []);
     } catch (err) {
       setError(err.message || "Failed to load dashboard data");
     } finally {
