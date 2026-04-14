@@ -42,6 +42,28 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} {siteConfig.name}. Built with React
             &amp; Node.js
           </p>
+
+          {/* Signature */}
+          <p className="text-dark-500 text-sm">
+            Created by{" "}
+            <a
+              href="https://serkanbayraktar.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary-400 hover:text-primary-300 transition-colors duration-200"
+            >
+              Serkanby
+            </a>
+            {" | "}
+            <a
+              href="https://github.com/Serkanbyx"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary-400 hover:text-primary-300 transition-colors duration-200"
+            >
+              Github
+            </a>
+          </p>
         </div>
       </div>
     </footer>

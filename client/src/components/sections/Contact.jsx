@@ -128,6 +128,14 @@ const Contact = () => {
   const isLeftInView = useInView(leftRef, { once: true, margin: "-80px" });
   const isRightInView = useInView(rightRef, { once: true, margin: "-80px" });
 
+  const resetForm = useCallback(() => {
+    setFormData(INITIAL_FORM_DATA);
+    setErrors(INITIAL_ERRORS);
+    setTouched(INITIAL_TOUCHED);
+    setIsSuccess(false);
+    setSubmitError("");
+  }, []);
+
   useEffect(() => {
     if (!isSuccess) return;
     const timer = setTimeout(() => resetForm(), 5000);
@@ -153,14 +161,6 @@ const Contact = () => {
     const { name, value } = e.target;
     setTouched((prev) => ({ ...prev, [name]: true }));
     setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
-  }, []);
-
-  const resetForm = useCallback(() => {
-    setFormData(INITIAL_FORM_DATA);
-    setErrors(INITIAL_ERRORS);
-    setTouched(INITIAL_TOUCHED);
-    setIsSuccess(false);
-    setSubmitError("");
   }, []);
 
   const handleSubmit = async (e) => {

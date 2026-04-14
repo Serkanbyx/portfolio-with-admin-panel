@@ -9,6 +9,8 @@ const transporter = nodemailer.createTransport({
     user: config.smtpUser,
     pass: config.smtpPass,
   },
+  // Force IPv4 — many cloud providers (Render, Railway) lack IPv6 egress
+  family: 4,
 });
 
 const sendEmail = async ({ to, subject, html, from, replyTo }) => {
