@@ -28,7 +28,7 @@ const Projects = () => {
       const { data } = await getProjects();
       setProjects(data.data || data || []);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to load projects.");
+      setError(err.message || "Failed to load projects.");
     } finally {
       setIsLoading(false);
     }

@@ -92,9 +92,9 @@ const ProjectTable = ({
                 >
                   {/* Image */}
                   <td className="px-4 py-3">
-                    {project.image ? (
+                    {project.image?.url ? (
                       <img
-                        src={project.image}
+                        src={project.image.url}
                         alt={project.title}
                         className="w-10 h-10 rounded-lg object-cover"
                       />

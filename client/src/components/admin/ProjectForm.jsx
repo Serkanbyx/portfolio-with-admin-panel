@@ -11,11 +11,11 @@ import * as projectService from "../../services/projectService";
 const INITIAL_FORM_DATA = {
   title: "",
   description: "",
-  technologies: [],
+  tech: [],
   liveUrl: "",
   githubUrl: "",
   featured: false,
-  status: "Draft",
+  status: "draft",
   order: 0,
 };
 
@@ -47,11 +47,11 @@ const ProjectForm = ({ isOpen, onClose, editingProject, onSuccess }) => {
       return JSON.stringify({
         title: editingProject.title || "",
         description: editingProject.description || "",
-        technologies: editingProject.technologies || [],
+        tech: editingProject.tech || [],
         liveUrl: editingProject.liveUrl || "",
         githubUrl: editingProject.githubUrl || "",
         featured: editingProject.featured || false,
-        status: editingProject.status || "Draft",
+        status: editingProject.status || "draft",
         order: editingProject.order ?? 0,
       });
     }
@@ -65,11 +65,11 @@ const ProjectForm = ({ isOpen, onClose, editingProject, onSuccess }) => {
       setFormData({
         title: editingProject.title || "",
         description: editingProject.description || "",
-        technologies: editingProject.technologies || [],
+        tech: editingProject.tech || [],
         liveUrl: editingProject.liveUrl || "",
         githubUrl: editingProject.githubUrl || "",
         featured: editingProject.featured || false,
-        status: editingProject.status || "Draft",
+        status: editingProject.status || "draft",
         order: editingProject.order ?? 0,
       });
       setCurrentImage(editingProject.image?.url || null);
@@ -120,14 +120,14 @@ const ProjectForm = ({ isOpen, onClose, editingProject, onSuccess }) => {
       const value = rawValue.trim();
       if (!value) return;
 
-      const isDuplicate = formData.technologies.some(
+      const isDuplicate = formData.tech.some(
         (t) => t.toLowerCase() === value.toLowerCase()
       );
       if (isDuplicate) return;
 
       setFormData((prev) => ({
         ...prev,
-        technologies: [...prev.technologies, value],
+        tech: [...prev.tech, value],
       }));
       setTechInput("");
     },
@@ -151,7 +151,7 @@ const ProjectForm = ({ isOpen, onClose, editingProject, onSuccess }) => {
   const removeTechTag = useCallback((index) => {
     setFormData((prev) => ({
       ...prev,
-      technologies: prev.technologies.filter((_, i) => i !== index),
+      tech: prev.tech.filter((_, i) => i !== index),
     }));
   }, []);
 
@@ -181,7 +181,7 @@ const ProjectForm = ({ isOpen, onClose, editingProject, onSuccess }) => {
       toast.error("Description must be under 1000 characters");
       return false;
     }
-    if (formData.technologies.length === 0) {
+    if (formData.tech.length === 0) {
       toast.error("At least one technology is required");
       return false;
     }
@@ -340,7 +340,7 @@ const ProjectForm = ({ isOpen, onClose, editingProject, onSuccess }) => {
                   />
                   <div className="flex flex-wrap gap-2 mt-2">
                     <AnimatePresence>
-                      {formData.technologies.map((tech, index) => (
+                      {formData.tech.map((tech, index) => (
                         <motion.span
                           key={tech}
                           initial={{ opacity: 0, scale: 0.8 }}
@@ -454,8 +454,8 @@ const ProjectForm = ({ isOpen, onClose, editingProject, onSuccess }) => {
                       onChange={handleChange}
                       className="w-full px-4 py-2.5 rounded-lg bg-dark-800 border border-dark-700 text-dark-50 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors text-sm appearance-none"
                     >
-                      <option value="Published">Published</option>
-                      <option value="Draft">Draft</option>
+                      <option value="published">Published</option>
+                      <option value="draft">Draft</option>
                     </select>
                   </div>
 

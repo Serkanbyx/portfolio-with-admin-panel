@@ -132,7 +132,7 @@ const Contact = () => {
     if (!isSuccess) return;
     const timer = setTimeout(() => resetForm(), 5000);
     return () => clearTimeout(timer);
-  }, [isSuccess]);
+  }, [isSuccess, resetForm]);
 
   const handleChange = useCallback(
     (e) => {
@@ -155,13 +155,13 @@ const Contact = () => {
     setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
   }, []);
 
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     setFormData(INITIAL_FORM_DATA);
     setErrors(INITIAL_ERRORS);
     setTouched(INITIAL_TOUCHED);
     setIsSuccess(false);
     setSubmitError("");
-  };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

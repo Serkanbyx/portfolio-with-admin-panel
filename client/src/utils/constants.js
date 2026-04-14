@@ -1,3 +1,5 @@
+import siteConfig from "../config/siteConfig";
+
 export const SKILL_CATEGORIES = [
   { value: "frontend", label: "Frontend", icon: "FiLayout", color: "text-blue-400" },
   { value: "backend", label: "Backend", icon: "FiServer", color: "text-green-400" },
@@ -14,8 +16,6 @@ export const NAV_LINKS = [
   { label: "Skills", href: "#skills" },
   { label: "Contact", href: "#contact" },
 ];
-
-import siteConfig from "../config/siteConfig";
 
 export const SOCIAL_LINKS = [
   { label: "GitHub", href: siteConfig.social.github, icon: "FiGithub" },

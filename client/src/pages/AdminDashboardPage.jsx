@@ -166,9 +166,9 @@ const AdminDashboardPage = () => {
                   key={project._id}
                   className="flex items-center gap-4 py-3 px-2 -mx-2 rounded-lg hover:bg-dark-800/30 transition-colors"
                 >
-                  {project.image ? (
+                  {project.image?.url ? (
                     <img
-                      src={project.image}
+                      src={project.image.url}
                       alt={project.title}
                       className="w-8 h-8 rounded object-cover shrink-0"
                     />

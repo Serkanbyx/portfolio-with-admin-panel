@@ -54,7 +54,7 @@ const Skills = () => {
       const { data } = await getSkills();
       setSkills(data.data || data || []);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to load skills.");
+      setError(err.message || "Failed to load skills.");
     } finally {
       setIsLoading(false);
     }

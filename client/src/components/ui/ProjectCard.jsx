@@ -20,7 +20,7 @@ const formatDate = (dateString) => {
 
 const ProjectCard = ({ project, index = 0 }) => {
   const gradientClass = GRADIENT_COMBOS[index % GRADIENT_COMBOS.length];
-  const techList = project.technologies || [];
+  const techList = project.tech || [];
   const visibleTechs = techList.slice(0, 3);
   const remainingCount = techList.length - 3;
 
@@ -29,9 +29,9 @@ const ProjectCard = ({ project, index = 0 }) => {
       <GlassCard hover padding="p-0">
         {/* Image */}
         <div className="relative overflow-hidden rounded-t-xl">
-          {project.image ? (
+          {project.image?.url ? (
             <motion.img
-              src={project.image}
+              src={project.image.url}
               alt={project.title}
               className="aspect-video object-cover w-full"
               whileHover={{ scale: 1.05 }}

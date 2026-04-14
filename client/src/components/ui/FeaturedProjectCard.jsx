@@ -22,9 +22,9 @@ const FeaturedProjectCard = ({ project, index }) => {
           <div
             className={`relative overflow-hidden rounded-xl group ${!isEven ? "lg:order-1" : ""}`}
           >
-            {project.image ? (
+            {project.image?.url ? (
               <motion.img
-                src={project.image}
+                src={project.image.url}
                 alt={project.title}
                 className="aspect-video object-cover w-full"
                 whileHover={{ scale: 1.05 }}
@@ -74,9 +74,9 @@ const FeaturedProjectCard = ({ project, index }) => {
               {project.description}
             </p>
 
-            {project.technologies?.length > 0 && (
+            {project.tech?.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-6">
-                {project.technologies.map((tech) => (
+                {project.tech.map((tech) => (
                   <TechBadge key={tech} name={tech} />
                 ))}
               </div>
