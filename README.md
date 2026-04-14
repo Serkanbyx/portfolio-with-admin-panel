@@ -19,6 +19,7 @@ A modern, production-ready portfolio website with a **CMS-like admin panel**, bu
 - **Route Protection** — Admin routes are guarded; unauthenticated users are redirected to login
 - **Ownership Isolation** — Single admin user model with role-based access control
 - **Security Hardened** — Helmet, CORS whitelist, rate limiting, input sanitization, HPP protection, and bcrypt password hashing
+- **Swagger API Docs** — Interactive OpenAPI 3.0 documentation at `/api-docs` with full schema definitions and try-it-out
 
 ---
 
@@ -198,6 +199,7 @@ On the frontend, `AdminRoute` and `GuestOnlyRoute` guards wrap protected routes.
 | `DELETE` | `/api/skills/:id`          | JWT+Admin  | Delete skill             |
 | `POST`   | `/api/contact`             | No         | Send contact message     |
 | `GET`    | `/api/health`              | No         | Health check             |
+| `GET`    | `/api-docs`                | No         | Swagger API documentation|
 
 > Auth endpoints require `Authorization: Bearer <token>` header.
 
@@ -462,11 +464,11 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Developer
 
-**Serkan Bayraktar**
+**Serkanby**
 
-- 🌐 [serkanbayraktar.com](https://serkanbayraktar.com/)
-- 🐙 [@Serkanbyx](https://github.com/Serkanbyx)
-- 📧 serkanbyx1@gmail.com
+- Website: [serkanbayraktar.com](https://serkanbayraktar.com/)
+- GitHub: [@Serkanbyx](https://github.com/Serkanbyx)
+- Email: [serkanbyx1@gmail.com](mailto:serkanbyx1@gmail.com)
 
 ---
 
@@ -486,9 +488,9 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-- 📋 [Open an Issue](https://github.com/Serkanbyx/portfolio-with-admin-panel/issues)
-- 📧 serkanbyx1@gmail.com
-- 🌐 [serkanbayraktar.com](https://serkanbayraktar.com/)
+- [Open an Issue](https://github.com/Serkanbyx/portfolio-with-admin-panel/issues)
+- Email: [serkanbyx1@gmail.com](mailto:serkanbyx1@gmail.com)
+- Website: [serkanbayraktar.com](https://serkanbayraktar.com/)
 
 ---
 
