@@ -5,9 +5,20 @@ const baseURL =
     ? import.meta.env.VITE_API_URL
     : "/api";
 
+const RETRY_CONFIG = {
+  maxRetries: 3,
+  baseDelay: 1500,
+  retryableStatuses: [500, 502, 503, 504],
+};
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const isRetryableRequest = (config) =>
+  config.method === "get" && !config._retryCount;
+
 const axiosInstance = axios.create({
   baseURL,
-  timeout: 10000,
+  timeout: 30000,
   headers: { "Content-Type": "application/json" },
 });
 
@@ -20,13 +31,32 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
-// Handle 401 responses globally & sanitize error objects
+// Retry on cold-start failures (5xx) for public GET requests
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
+    const config = error.config;
+    const status = error.response?.status;
+    const isTimeout = error.code === "ECONNABORTED";
+
+    const shouldRetry =
+      config &&
+      (isRetryableRequest(config) || config._retryCount > 0) &&
+      (RETRY_CONFIG.retryableStatuses.includes(status) || isTimeout);
+
+    if (shouldRetry) {
+      config._retryCount = (config._retryCount || 0) + 1;
+
+      if (config._retryCount <= RETRY_CONFIG.maxRetries) {
+        const delay = RETRY_CONFIG.baseDelay * config._retryCount;
+        await sleep(delay);
+        return axiosInstance(config);
+      }
+    }
+
     if (error.response?.status === 401) {
       localStorage.removeItem("portfolio_token");
 
@@ -38,7 +68,7 @@ axiosInstance.interceptors.response.use(
     const message =
       error.response?.data?.message || "Something went wrong";
     return Promise.reject(new Error(message));
-  }
+  },
 );
 
 export default axiosInstance;

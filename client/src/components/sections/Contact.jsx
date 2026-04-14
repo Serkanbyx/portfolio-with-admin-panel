@@ -7,6 +7,7 @@ import {
   FiSend,
   FiGithub,
   FiLinkedin,
+  FiAlertCircle,
 } from "react-icons/fi";
 import { FaXTwitter } from "react-icons/fa6";
 import { toast } from "react-hot-toast";
@@ -118,6 +119,7 @@ const Contact = () => {
   const [touched, setTouched] = useState(INITIAL_TOUCHED);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const leftRef = useRef(null);
   const rightRef = useRef(null);
@@ -130,16 +132,13 @@ const Contact = () => {
     return () => clearTimeout(timer);
   }, [isSuccess]);
 
-  const isFormValid =
-    Object.values(errors).every((e) => e === "") &&
-    Object.values(formData).every((v) => v.trim() !== "");
-
   const handleChange = useCallback(
     (e) => {
       const { name, value } = e.target;
       if (name === "message" && value.length > MESSAGE_MAX) return;
 
       setFormData((prev) => ({ ...prev, [name]: value }));
+      setSubmitError("");
 
       if (touched[name]) {
         setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
@@ -159,6 +158,7 @@ const Contact = () => {
     setErrors(INITIAL_ERRORS);
     setTouched(INITIAL_TOUCHED);
     setIsSuccess(false);
+    setSubmitError("");
   };
 
   const handleSubmit = async (e) => {
@@ -177,12 +177,16 @@ const Contact = () => {
     if (Object.values(newErrors).some((err) => err !== "")) return;
 
     setIsSubmitting(true);
+    setSubmitError("");
     try {
       await contactService.sendMessage(formData);
       setIsSuccess(true);
       toast.success("Message sent successfully!");
     } catch (error) {
-      toast.error(error.message || "Failed to send message. Please try again.");
+      const errorMessage =
+        error.message || "Failed to send message. Please try again.";
+      setSubmitError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -282,7 +286,7 @@ const Contact = () => {
                   errors={errors}
                   touched={touched}
                   isSubmitting={isSubmitting}
-                  isFormValid={isFormValid}
+                  submitError={submitError}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   onSubmit={handleSubmit}
@@ -301,7 +305,7 @@ const ContactForm = ({
   errors,
   touched,
   isSubmitting,
-  isFormValid,
+  submitError,
   onChange,
   onBlur,
   onSubmit,
@@ -376,11 +380,26 @@ const ContactForm = ({
       </div>
     </motion.div>
 
+    {/* Submit Error */}
+    <AnimatePresence>
+      {submitError && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          className="flex items-center gap-2 bg-error-500/10 border border-error-500/20 text-error-500 text-sm px-4 py-3 rounded-xl"
+        >
+          <FiAlertCircle className="w-4 h-4 shrink-0" />
+          <span>{submitError}</span>
+        </motion.div>
+      )}
+    </AnimatePresence>
+
     {/* Submit */}
     <motion.div variants={fadeInUp}>
       <motion.button
         type="submit"
-        disabled={!isFormValid || isSubmitting}
+        disabled={isSubmitting}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.97 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}

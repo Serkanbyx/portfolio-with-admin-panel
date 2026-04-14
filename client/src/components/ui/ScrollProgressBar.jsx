@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 
 const ScrollProgressBar = () => {
@@ -7,6 +8,10 @@ const ScrollProgressBar = () => {
     damping: 30,
     restDelta: 0.001,
   });
+
+  useEffect(() => {
+    scaleX.jump(scrollYProgress.get() || 0);
+  }, [scaleX, scrollYProgress]);
 
   return (
     <motion.div
