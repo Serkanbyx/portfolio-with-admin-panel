@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 import { FiX, FiExternalLink, FiGithub } from "react-icons/fi";
@@ -40,29 +40,16 @@ const ProjectForm = ({ isOpen, onClose, editingProject, onSuccess }) => {
   const [currentImage, setCurrentImage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDiscardModal, setShowDiscardModal] = useState(false);
-
-  const initialSnapshot = useMemo(() => {
-    if (!isOpen) return null;
-    if (editingProject) {
-      return JSON.stringify({
-        title: editingProject.title || "",
-        description: editingProject.description || "",
-        tech: editingProject.tech || [],
-        liveUrl: editingProject.liveUrl || "",
-        githubUrl: editingProject.githubUrl || "",
-        featured: editingProject.featured || false,
-        status: editingProject.status || "draft",
-        order: editingProject.order ?? 0,
-      });
-    }
-    return JSON.stringify(INITIAL_FORM_DATA);
-  }, [isOpen, editingProject]);
+  const initialSnapshotRef = useRef(null);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      initialSnapshotRef.current = null;
+      return;
+    }
 
     if (editingProject) {
-      setFormData({
+      const data = {
         title: editingProject.title || "",
         description: editingProject.description || "",
         tech: editingProject.tech || [],
@@ -71,10 +58,13 @@ const ProjectForm = ({ isOpen, onClose, editingProject, onSuccess }) => {
         featured: editingProject.featured || false,
         status: editingProject.status || "draft",
         order: editingProject.order ?? 0,
-      });
+      };
+      setFormData(data);
+      initialSnapshotRef.current = JSON.stringify(data);
       setCurrentImage(editingProject.image?.url || null);
     } else {
       setFormData(INITIAL_FORM_DATA);
+      initialSnapshotRef.current = JSON.stringify(INITIAL_FORM_DATA);
       setCurrentImage(null);
     }
 
@@ -93,9 +83,9 @@ const ProjectForm = ({ isOpen, onClose, editingProject, onSuccess }) => {
   }, [isOpen]);
 
   const hasUnsavedChanges = useMemo(() => {
-    if (!initialSnapshot) return false;
-    return JSON.stringify(formData) !== initialSnapshot || imageFile !== null;
-  }, [formData, initialSnapshot, imageFile]);
+    if (!initialSnapshotRef.current) return false;
+    return JSON.stringify(formData) !== initialSnapshotRef.current || imageFile !== null;
+  }, [formData, imageFile]);
 
   const handleClose = useCallback(() => {
     if (hasUnsavedChanges) {
@@ -131,7 +121,7 @@ const ProjectForm = ({ isOpen, onClose, editingProject, onSuccess }) => {
       }));
       setTechInput("");
     },
-    [formData.technologies]
+    [formData.tech]
   );
 
   const handleTechKeyDown = useCallback(
