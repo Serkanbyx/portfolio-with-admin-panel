@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   FiImage,
   FiStar,
@@ -23,6 +23,11 @@ const ProjectTable = ({
 }) => {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [brokenImages, setBrokenImages] = useState(new Set());
+
+  const handleImageError = useCallback((projectId) => {
+    setBrokenImages((prev) => new Set(prev).add(projectId));
+  }, []);
 
   const handleDeleteConfirm = async () => {
     if (!deleteTarget) return;
@@ -92,11 +97,12 @@ const ProjectTable = ({
                 >
                   {/* Image */}
                   <td className="px-4 py-3">
-                    {project.image?.url ? (
+                    {project.image?.url && !brokenImages.has(project._id) ? (
                       <img
                         src={project.image.url}
                         alt={project.title}
                         className="w-10 h-10 rounded-lg object-cover"
+                        onError={() => handleImageError(project._id)}
                       />
                     ) : (
                       <div className="w-10 h-10 rounded-lg bg-dark-700 flex items-center justify-center">

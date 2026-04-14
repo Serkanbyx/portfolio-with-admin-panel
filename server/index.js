@@ -13,6 +13,8 @@ const authRoutes = require("./routes/authRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 const skillRoutes = require("./routes/skillRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const messageRoutes = require("./routes/messageRoutes");
+const settingsRoutes = require("./routes/settingsRoutes");
 const { version } = require("./package.json");
 
 const app = express();
@@ -72,6 +74,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/skills", skillRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/messages", messageRoutes);
+app.use("/api/settings", settingsRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {

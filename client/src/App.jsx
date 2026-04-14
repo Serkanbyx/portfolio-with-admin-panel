@@ -11,6 +11,8 @@ import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminProjectsPage from "./pages/AdminProjectsPage";
 import AdminSkillsPage from "./pages/AdminSkillsPage";
+import AdminMessagesPage from "./pages/AdminMessagesPage";
+import AdminSettingsPage from "./pages/AdminSettingsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 const App = () => {
@@ -33,6 +35,8 @@ const App = () => {
             <Route index element={<AdminDashboardPage />} />
             <Route path="projects" element={<AdminProjectsPage />} />
             <Route path="skills" element={<AdminSkillsPage />} />
+            <Route path="messages" element={<AdminMessagesPage />} />
+            <Route path="settings" element={<AdminSettingsPage />} />
           </Route>
         </Route>
 

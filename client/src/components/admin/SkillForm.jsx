@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-hot-toast";
-import { FiX } from "react-icons/fi";
+import { FiX, FiChevronDown } from "react-icons/fi";
 
 import Spinner from "../ui/Spinner";
 import * as skillService from "../../services/skillService";
@@ -19,6 +19,7 @@ const SkillForm = ({ isOpen, onClose, editingSkill, onSuccess }) => {
   const modalRef = useRef(null);
 
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
+  const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -34,6 +35,7 @@ const SkillForm = ({ isOpen, onClose, editingSkill, onSuccess }) => {
     } else {
       setFormData(INITIAL_FORM_DATA);
     }
+    setErrors({});
   }, [isOpen, editingSkill]);
 
   useEffect(() => {
@@ -75,6 +77,7 @@ const SkillForm = ({ isOpen, onClose, editingSkill, onSuccess }) => {
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => (prev[name] ? { ...prev, [name]: "" } : prev));
   }, []);
 
   const handleLevelChange = useCallback((e) => {
@@ -88,23 +91,17 @@ const SkillForm = ({ isOpen, onClose, editingSkill, onSuccess }) => {
   }, []);
 
   const validate = useCallback(() => {
-    if (!formData.name.trim()) {
-      toast.error("Name is required");
-      return false;
-    }
-    if (formData.name.length > 50) {
-      toast.error("Name must be under 50 characters");
-      return false;
-    }
-    if (!formData.category) {
-      toast.error("Category is required");
-      return false;
-    }
-    if (formData.level < 0 || formData.level > 100) {
-      toast.error("Level must be between 0 and 100");
-      return false;
-    }
-    return true;
+    const newErrors = {};
+
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    else if (formData.name.length > 50) newErrors.name = "Name must be under 50 characters";
+
+    if (!formData.category) newErrors.category = "Category is required";
+
+    if (formData.level < 0 || formData.level > 100) newErrors.level = "Level must be between 0 and 100";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   }, [formData]);
 
   const handleSubmit = async (e) => {
@@ -189,13 +186,15 @@ const SkillForm = ({ isOpen, onClose, editingSkill, onSuccess }) => {
                     id="sf-name"
                     name="name"
                     type="text"
-                    required
                     maxLength={50}
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="React"
-                    className={inputClass}
+                    className={`${inputClass} ${errors.name ? "border-error-500 focus:border-error-500 focus:ring-error-500/30" : ""}`}
                   />
+                  {errors.name && (
+                    <p className="text-error-500 text-xs mt-1">{errors.name}</p>
+                  )}
                 </div>
 
                 {/* Category */}
@@ -206,23 +205,28 @@ const SkillForm = ({ isOpen, onClose, editingSkill, onSuccess }) => {
                   >
                     Category <span className="text-error-500">*</span>
                   </label>
-                  <select
-                    id="sf-category"
-                    name="category"
-                    required
-                    value={formData.category}
-                    onChange={handleChange}
-                    className={`${inputClass} appearance-none`}
-                  >
-                    <option value="" disabled>
-                      Select a category
-                    </option>
-                    {SKILL_CATEGORIES.map((cat) => (
-                      <option key={cat.value} value={cat.value}>
-                        {cat.label}
+                  <div className="relative">
+                    <select
+                      id="sf-category"
+                      name="category"
+                      value={formData.category}
+                      onChange={handleChange}
+                      className={`${inputClass} appearance-none pr-10 ${errors.category ? "border-error-500 focus:border-error-500 focus:ring-error-500/30" : ""}`}
+                    >
+                      <option value="" disabled>
+                        Select a category
                       </option>
-                    ))}
-                  </select>
+                      {SKILL_CATEGORIES.map((cat) => (
+                        <option key={cat.value} value={cat.value}>
+                          {cat.label}
+                        </option>
+                      ))}
+                    </select>
+                    <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-dark-400 pointer-events-none" />
+                  </div>
+                  {errors.category && (
+                    <p className="text-error-500 text-xs mt-1">{errors.category}</p>
+                  )}
                 </div>
 
                 {/* Level — Range Slider + Number */}
@@ -249,7 +253,7 @@ const SkillForm = ({ isOpen, onClose, editingSkill, onSuccess }) => {
                       onChange={handleLevelChange}
                       className="skill-range-slider flex-1 h-2 rounded-full appearance-none bg-dark-700 cursor-pointer"
                       style={{
-                        background: `linear-gradient(to right, var(--color-primary-500) ${formData.level}%, var(--color-dark-700) ${formData.level}%)`,
+                        background: `linear-gradient(to right, var(--color-primary-500) calc(${formData.level}% + ${10 - (formData.level / 100) * 20}px), var(--color-dark-700) calc(${formData.level}% + ${10 - (formData.level / 100) * 20}px))`,
                       }}
                     />
 

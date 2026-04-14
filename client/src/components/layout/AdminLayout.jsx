@@ -6,6 +6,8 @@ import {
   FiHome,
   FiFolder,
   FiCode,
+  FiMessageSquare,
+  FiSettings,
   FiExternalLink,
   FiLogOut,
   FiMenu,
@@ -18,6 +20,8 @@ const NAV_LINKS = [
   { to: "/admin", label: "Dashboard", icon: FiHome, end: true },
   { to: "/admin/projects", label: "Projects", icon: FiFolder },
   { to: "/admin/skills", label: "Skills", icon: FiCode },
+  { to: "/admin/messages", label: "Messages", icon: FiMessageSquare },
+  { to: "/admin/settings", label: "Settings", icon: FiSettings },
 ];
 
 const navLinkClasses = ({ isActive }) =>

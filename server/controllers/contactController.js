@@ -1,6 +1,7 @@
 const config = require("../config/env");
 const sendEmail = require("../utils/sendEmail");
 const { escapeHtml } = require("../utils/helpers");
+const Message = require("../models/Message");
 
 const sendContactMessage = async (req, res) => {
   try {
@@ -94,17 +95,25 @@ const sendContactMessage = async (req, res) => {
       </html>
     `;
 
-    await sendEmail({
-      from: config.smtpUser,
-      to: config.contactToEmail,
-      replyTo: email.trim(),
-      subject: `Portfolio Contact: ${safeName}`,
-      html,
-    });
+    const [savedMessage] = await Promise.all([
+      Message.create({
+        name: name.trim(),
+        email: email.trim(),
+        message: message.trim(),
+      }),
+      sendEmail({
+        from: config.smtpUser,
+        to: config.contactToEmail,
+        replyTo: email.trim(),
+        subject: `Portfolio Contact: ${safeName}`,
+        html,
+      }),
+    ]);
 
     res.status(200).json({
       success: true,
       message: "Message sent successfully",
+      data: { id: savedMessage._id },
     });
   } catch (error) {
     console.error("Contact email error:", error.message);
