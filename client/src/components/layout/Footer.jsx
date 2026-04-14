@@ -1,10 +1,11 @@
-import { FiGithub, FiLinkedin, FiTwitter } from "react-icons/fi";
+import { FiGithub, FiLinkedin } from "react-icons/fi";
+import { FaXTwitter } from "react-icons/fa6";
 import { SOCIAL_LINKS } from "../../utils/constants";
 
 const SOCIAL_ICON_MAP = {
   FiGithub: FiGithub,
   FiLinkedin: FiLinkedin,
-  FiTwitter: FiTwitter,
+  FaXTwitter: FaXTwitter,
 };
 
 const Footer = () => {

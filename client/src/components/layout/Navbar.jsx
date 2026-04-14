@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiMenu, FiX, FiGithub, FiLinkedin, FiTwitter } from "react-icons/fi";
+import { FiMenu, FiX, FiGithub, FiLinkedin } from "react-icons/fi";
+import { FaXTwitter } from "react-icons/fa6";
 import GradientText from "../ui/GradientText";
 import useScrollSpy from "../../hooks/useScrollSpy";
 import { NAV_LINKS, SOCIAL_LINKS } from "../../utils/constants";
@@ -8,7 +9,7 @@ import { NAV_LINKS, SOCIAL_LINKS } from "../../utils/constants";
 const SOCIAL_ICON_MAP = {
   FiGithub: FiGithub,
   FiLinkedin: FiLinkedin,
-  FiTwitter: FiTwitter,
+  FaXTwitter: FaXTwitter,
 };
 
 const sectionIds = NAV_LINKS.map((link) => link.href.replace("#", ""));

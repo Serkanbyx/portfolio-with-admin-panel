@@ -18,5 +18,5 @@ export const NAV_LINKS = [
 export const SOCIAL_LINKS = [
   { label: "GitHub", href: "https://github.com/yourusername", icon: "FiGithub" },
   { label: "LinkedIn", href: "https://linkedin.com/in/yourusername", icon: "FiLinkedin" },
-  { label: "Twitter", href: "https://twitter.com/yourusername", icon: "FiTwitter" },
+  { label: "X", href: "https://x.com/yourusername", icon: "FaXTwitter" },
 ];

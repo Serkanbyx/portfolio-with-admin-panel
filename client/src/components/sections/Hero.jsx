@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FiArrowDown, FiMail, FiGithub, FiLinkedin, FiTwitter, FiChevronDown } from "react-icons/fi";
+import { FiArrowDown, FiMail, FiGithub, FiLinkedin, FiChevronDown } from "react-icons/fi";
+import { FaXTwitter } from "react-icons/fa6";
 import GradientText from "../ui/GradientText";
 import { fadeInUp, staggerContainer } from "../../utils/animations";
 import { SOCIAL_LINKS } from "../../utils/constants";
@@ -16,7 +17,7 @@ const HERO_CONTENT = {
 const ICON_MAP = {
   FiGithub,
   FiLinkedin,
-  FiTwitter,
+  FaXTwitter,
 };
 
 const Hero = () => {

@@ -7,8 +7,8 @@ import {
   FiSend,
   FiGithub,
   FiLinkedin,
-  FiTwitter,
 } from "react-icons/fi";
+import { FaXTwitter } from "react-icons/fa6";
 import { toast } from "react-hot-toast";
 
 import SectionWrapper from "../ui/SectionWrapper";
@@ -28,7 +28,7 @@ import * as contactService from "../../services/contactService";
 const SOCIAL_ICON_MAP = {
   FiGithub,
   FiLinkedin,
-  FiTwitter,
+  FaXTwitter,
 };
 
 const CONTACT_INFO = [
