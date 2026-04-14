@@ -25,6 +25,7 @@ import {
   staggerContainer,
 } from "../../utils/animations";
 import * as contactService from "../../services/contactService";
+import siteConfig from "../../config/siteConfig";
 
 const SOCIAL_ICON_MAP = {
   FiGithub,
@@ -35,18 +36,18 @@ const SOCIAL_ICON_MAP = {
 const CONTACT_INFO = [
   {
     icon: FiMail,
-    label: "your.email@example.com",
-    href: "mailto:your.email@example.com",
+    label: siteConfig.email,
+    href: `mailto:${siteConfig.email}`,
     type: "link",
   },
   {
     icon: FiMapPin,
-    label: "Istanbul, Turkey",
+    label: siteConfig.location,
     type: "text",
   },
   {
     icon: FiCheckCircle,
-    label: "Available for freelance",
+    label: siteConfig.availabilityText,
     type: "availability",
   },
 ];

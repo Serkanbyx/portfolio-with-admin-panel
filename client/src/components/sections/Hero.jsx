@@ -5,13 +5,13 @@ import { FaXTwitter } from "react-icons/fa6";
 import GradientText from "../ui/GradientText";
 import { fadeInUp, staggerContainer } from "../../utils/animations";
 import { SOCIAL_LINKS } from "../../utils/constants";
+import siteConfig from "../../config/siteConfig";
 
 const HERO_CONTENT = {
-  greeting: "Hello, I'm",
-  name: "Your Name",
-  role: "Full-Stack Developer",
-  tagline:
-    "I build modern web applications with clean code and great user experiences.",
+  greeting: siteConfig.greeting,
+  name: siteConfig.name,
+  role: siteConfig.role,
+  tagline: siteConfig.tagline,
 };
 
 const ICON_MAP = {

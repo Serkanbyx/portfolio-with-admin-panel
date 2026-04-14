@@ -4,29 +4,30 @@ import About from "../components/sections/About";
 import Projects from "../components/sections/Projects";
 import Skills from "../components/sections/Skills";
 import Contact from "../components/sections/Contact";
+import siteConfig, { getFullTitle, getOgImageUrl } from "../config/siteConfig";
 
 const HomePage = () => {
+  const fullTitle = getFullTitle();
+  const ogImageUrl = getOgImageUrl();
+
   return (
     <>
       <Helmet>
-        <title>Your Name | Full-Stack Developer Portfolio</title>
-        <meta
-          name="description"
-          content="Full-stack developer portfolio showcasing modern web projects built with React, Node.js, MongoDB, and more. Open to new opportunities."
-        />
-        <meta property="og:title" content="Your Name | Full-Stack Developer" />
+        <title>{fullTitle}</title>
+        <meta name="description" content={siteConfig.metaDescription} />
+        <meta property="og:title" content={fullTitle} />
         <meta
           property="og:description"
-          content="Full-stack developer portfolio showcasing modern web projects."
+          content={siteConfig.metaDescription}
         />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://yourdomain.com" />
-        <meta
-          property="og:image"
-          content="https://yourdomain.com/og-image.png"
-        />
+        <meta property="og:url" content={siteConfig.siteUrl} />
+        <meta property="og:image" content={ogImageUrl} />
         <meta name="twitter:card" content="summary_large_image" />
-        <link rel="canonical" href="https://yourdomain.com" />
+        <meta name="twitter:title" content={fullTitle} />
+        <meta name="twitter:description" content={siteConfig.metaDescription} />
+        <meta name="twitter:image" content={ogImageUrl} />
+        <link rel="canonical" href={siteConfig.siteUrl} />
       </Helmet>
 
       <Hero />

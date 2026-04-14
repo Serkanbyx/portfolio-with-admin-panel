@@ -1,6 +1,7 @@
 import { FiGithub, FiLinkedin } from "react-icons/fi";
 import { FaXTwitter } from "react-icons/fa6";
 import { SOCIAL_LINKS } from "../../utils/constants";
+import siteConfig from "../../config/siteConfig";
 
 const SOCIAL_ICON_MAP = {
   FiGithub: FiGithub,
@@ -38,8 +39,8 @@ const Footer = () => {
 
           {/* Copyright */}
           <p className="text-dark-500 text-sm">
-            &copy; {new Date().getFullYear()} Your Name. Built with React &amp;
-            Node.js
+            &copy; {new Date().getFullYear()} {siteConfig.name}. Built with React
+            &amp; Node.js
           </p>
         </div>
       </div>

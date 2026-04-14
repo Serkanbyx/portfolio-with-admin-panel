@@ -15,8 +15,10 @@ export const NAV_LINKS = [
   { label: "Contact", href: "#contact" },
 ];
 
+import siteConfig from "../config/siteConfig";
+
 export const SOCIAL_LINKS = [
-  { label: "GitHub", href: "https://github.com/yourusername", icon: "FiGithub" },
-  { label: "LinkedIn", href: "https://linkedin.com/in/yourusername", icon: "FiLinkedin" },
-  { label: "X", href: "https://x.com/yourusername", icon: "FaXTwitter" },
+  { label: "GitHub", href: siteConfig.social.github, icon: "FiGithub" },
+  { label: "LinkedIn", href: siteConfig.social.linkedin, icon: "FiLinkedin" },
+  { label: "X", href: siteConfig.social.twitter, icon: "FaXTwitter" },
 ];
