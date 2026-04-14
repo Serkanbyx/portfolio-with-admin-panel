@@ -90,7 +90,6 @@ projectSchema.pre("save", async function () {
   }
 });
 
-projectSchema.index({ slug: 1 }, { unique: true });
 projectSchema.index({ featured: 1, order: 1 });
 projectSchema.index({ status: 1 });
 

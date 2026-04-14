@@ -34,6 +34,5 @@ const skillSchema = new mongoose.Schema(
 );
 
 skillSchema.index({ category: 1, order: 1 });
-skillSchema.index({ name: 1 }, { unique: true });
 
 module.exports = mongoose.model("Skill", skillSchema);
