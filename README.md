@@ -1,213 +1,90 @@
-# Portfolio With Admin Panel
+# 🎨 Portfolio With Admin Panel
 
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)
-![Express](https://img.shields.io/badge/Express-5-000000?logo=express&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-8-47A248?logo=mongodb&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-06B6D4?logo=tailwindcss&logoColor=white)
-![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-0055FF?logo=framer&logoColor=white)
-![Cloudinary](https://img.shields.io/badge/Cloudinary-✓-3448C5?logo=cloudinary&logoColor=white)
-![JWT](https://img.shields.io/badge/JWT-Auth-000000?logo=jsonwebtokens&logoColor=white)
+A modern, production-ready portfolio website with a **CMS-like admin panel**, built with the **MERN** stack (MongoDB, Express, React, Node.js). Features JWT authentication, Cloudinary image uploads, contact form with email notifications, glassmorphism dark theme, smooth scroll animations with Framer Motion, and a security-hardened backend.
 
-> A modern, production-ready portfolio website with a CMS-like admin panel for managing projects and skills.
+[![Created by Serkanby](https://img.shields.io/badge/Created%20by-Serkanby-blue?style=flat-square)](https://serkanbayraktar.com/)
+[![GitHub](https://img.shields.io/badge/GitHub-Serkanbyx-181717?style=flat-square&logo=github)](https://github.com/Serkanbyx)
+
+---
 
 ## Features
 
-- Responsive single-page portfolio with smooth scroll animations
-- Glassmorphism dark theme with gradient accents
-- Admin panel with JWT authentication (single admin user)
-- Project management with Cloudinary image uploads
-- Skill management with category grouping
-- Contact form with email notifications via Nodemailer
-- SEO optimized with react-helmet-async and Open Graph tags
-- Scroll progress bar, animated counters, and micro-interactions
-- Production-ready security (Helmet, CORS, rate limiting, input sanitization)
+- **Responsive Single-Page Portfolio** — Fully responsive design with smooth scroll animations and glassmorphism dark theme
+- **Admin Panel (CMS)** — JWT-authenticated admin dashboard for managing all portfolio content without touching code
+- **Project Management** — Full CRUD operations with Cloudinary image uploads, featured project highlighting, and draft/published status
+- **Skill Management** — Create, edit, and delete skills with category grouping and proficiency levels (0–100)
+- **Contact Form** — Visitors can send messages directly; admin receives email notifications via Nodemailer (SMTP)
+- **SEO Optimized** — Server-side meta tags with react-helmet-async and Open Graph support
+- **Scroll Progress Bar** — Visual scroll indicator, animated counters, and micro-interactions throughout the UI
+- **Route Protection** — Admin routes are guarded; unauthenticated users are redirected to login
+- **Ownership Isolation** — Single admin user model with role-based access control
+- **Security Hardened** — Helmet, CORS whitelist, rate limiting, input sanitization, HPP protection, and bcrypt password hashing
 
-## Tech Stack
+---
 
-| Category   | Technologies                                                            |
-| ---------- | ----------------------------------------------------------------------- |
-| Frontend   | React 19, Vite, TailwindCSS v4, Framer Motion, React Router v7, Axios  |
-| Backend    | Node.js, Express 5, MongoDB, Mongoose, JWT                              |
-| Services   | Cloudinary (images), Nodemailer (email)                                 |
-| Security   | Helmet, CORS, Rate Limiting, express-mongo-sanitize, hpp, bcryptjs      |
-| Deployment | Render (backend), Netlify (frontend), MongoDB Atlas                     |
+## Live Demo
 
-## Getting Started
+[🚀 View Live Demo](https://portfolio-with-admin-panel.netlify.app/)
+
+---
+
+## Technologies
+
+### Frontend
+
+- **React 19** — Modern UI library with hooks and context for state management
+- **Vite 8** — Lightning-fast build tool and dev server with HMR
+- **Tailwind CSS 4** — Utility-first CSS framework with @tailwindcss/vite plugin
+- **Framer Motion 12** — Production-ready animation library for smooth transitions and scroll effects
+- **React Router 7** — Declarative client-side routing with nested layouts
+- **Axios** — Promise-based HTTP client with interceptors for auth and error handling
+- **React Helmet Async** — SEO management with dynamic meta tags and Open Graph support
+- **React Hot Toast** — Elegant toast notifications for user feedback
+- **React Icons** — Icon library for consistent visual elements
+
+### Backend
+
+- **Node.js** — Server-side JavaScript runtime
+- **Express 5** — Minimal and flexible web application framework
+- **MongoDB (Mongoose 9)** — NoSQL database with elegant object modeling and schema validation
+- **JWT (jsonwebtoken)** — Stateless authentication with token-based sessions
+- **Cloudinary** — Cloud-based image upload, storage, and transformation
+- **Nodemailer** — Email sending for contact form notifications via SMTP
+- **Multer 2** — Multipart form-data handling for image uploads (memory storage)
+- **bcryptjs** — Secure password hashing with configurable salt rounds
+- **express-validator** — Request validation and sanitization middleware
+- **Helmet** — Secure HTTP headers
+- **express-rate-limit** — Rate limiting for API protection
+- **express-mongo-sanitize** — NoSQL injection prevention
+- **hpp** — HTTP parameter pollution protection
+
+---
+
+## Installation
 
 ### Prerequisites
 
-- Node.js 18+
-- MongoDB (local or [Atlas](https://www.mongodb.com/atlas))
-- [Cloudinary](https://cloudinary.com) account
-- SMTP email account (e.g. Gmail App Password)
+- **Node.js** v18+ and **npm**
+- **MongoDB** — [MongoDB Atlas](https://www.mongodb.com/atlas) (free tier) or local instance
+- **[Cloudinary](https://cloudinary.com)** account (free tier) for image uploads
+- **SMTP email account** — Gmail with App Password or any SMTP provider
 
-### Installation
+### Local Development
+
+**1. Clone the repository:**
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/your-username/portfolio-with-admin-panel.git
+git clone https://github.com/Serkanbyx/portfolio-with-admin-panel.git
 cd portfolio-with-admin-panel
-
-# 2. Install server dependencies
-cd server && npm install
-
-# 3. Install client dependencies
-cd ../client && npm install
-
-# 4. Create server environment variables
-cd ../server
-cp .env.example .env
-# Edit .env with your actual values
-
-# 5. Create client environment variables
-cd ../client
-cp .env.example .env
-# Edit .env with your API URL
-
-# 6. Seed the admin user
-cd ../server && npm run seed
-
-# 7. Start development servers
-# Terminal 1 — Backend
-cd server && npm run dev
-
-# Terminal 2 — Frontend
-cd client && npm run dev
 ```
 
-### Admin Access
+**2. Set up environment variables:**
 
-Navigate to `/admin/login` and use the `ADMIN_EMAIL` / `ADMIN_PASSWORD` credentials from your `server/.env` file.
-
-## API Endpoints
-
-| Method | Path                      | Auth      | Description            |
-| ------ | ------------------------- | --------- | ---------------------- |
-| POST   | `/api/auth/login`         | No        | Admin login            |
-| GET    | `/api/auth/me`            | JWT       | Get current user       |
-| GET    | `/api/projects`           | No        | Get published projects |
-| GET    | `/api/projects/:slug`     | No        | Get project by slug    |
-| GET    | `/api/projects/admin/all` | JWT+Admin | Get all projects       |
-| POST   | `/api/projects`           | JWT+Admin | Create project         |
-| PUT    | `/api/projects/:id`       | JWT+Admin | Update project         |
-| DELETE | `/api/projects/:id`       | JWT+Admin | Delete project         |
-| POST   | `/api/projects/:id/image` | JWT+Admin | Upload project image   |
-| DELETE | `/api/projects/:id/image` | JWT+Admin | Delete project image   |
-| GET    | `/api/skills`             | No        | Get all skills         |
-| POST   | `/api/skills`             | JWT+Admin | Create skill           |
-| PUT    | `/api/skills/:id`         | JWT+Admin | Update skill           |
-| DELETE | `/api/skills/:id`         | JWT+Admin | Delete skill           |
-| POST   | `/api/contact`            | No        | Send contact message   |
-| GET    | `/api/health`             | No        | Health check           |
-
-## Security
-
-- **Helmet** — Secure HTTP headers
-- **CORS** — Strict origin whitelist (no wildcards in production)
-- **Rate Limiting** — Protects against brute-force and DDoS
-- **express-mongo-sanitize** — Prevents NoSQL injection
-- **hpp** — HTTP parameter pollution protection
-- **bcryptjs** — Password hashing with salt rounds
-- **JWT** — Stateless authentication with expiration
-- **Input Validation** — express-validator on all endpoints
-- **File Upload** — Type and size restrictions via Multer
-
-## Folder Structure
-
-```
-├── client/                 # React frontend (Vite)
-│   ├── src/
-│   │   ├── api/            # Axios instance
-│   │   ├── components/
-│   │   │   ├── admin/      # Admin panel components
-│   │   │   ├── layout/     # Navbar, Footer, Layouts
-│   │   │   ├── sections/   # Hero, About, Projects, Skills, Contact
-│   │   │   └── ui/         # Reusable UI components
-│   │   ├── contexts/       # Auth context (React Context API)
-│   │   ├── guards/         # Route guards (AdminRoute, GuestOnly)
-│   │   ├── hooks/          # Custom hooks
-│   │   ├── pages/          # Page components
-│   │   ├── services/       # API service functions
-│   │   └── utils/          # Constants, animations
-│   ├── netlify.toml        # SPA redirect & build config
-│   └── vite.config.js
-│
-├── server/                 # Express backend
-│   ├── config/             # DB connection, environment config
-│   ├── controllers/        # Route handlers
-│   ├── middlewares/         # Auth, error handler, rate limiter, upload
-│   ├── models/             # Mongoose schemas (User, Project, Skill)
-│   ├── routes/             # API route definitions
-│   ├── utils/              # Cloudinary, email, helpers
-│   ├── validators/         # express-validator schemas
-│   ├── seed.js             # Admin user seeder
-│   └── index.js            # Entry point
-│
-└── README.md
+```bash
+cp server/.env.example server/.env
 ```
 
-## Deployment
-
-### MongoDB Atlas Setup
-
-1. Create a free cluster on [MongoDB Atlas](https://www.mongodb.com/atlas).
-2. Create a database user with a **strong generated password** (different from `ADMIN_PASSWORD`).
-3. Network Access: add `0.0.0.0/0` to allow connections from Render.
-4. Get the connection string (`mongodb+srv://...`). **Never commit it.**
-
-### Backend — Render
-
-1. Create a new **Web Service** on [Render](https://render.com) and connect your GitHub repository.
-2. Configure the service:
-   - **Root Directory:** `server`
-   - **Build Command:** `npm install`
-   - **Start Command:** `npm start`
-   - **Environment:** `Node`
-3. Add environment variables:
-
-| Variable           | Value                                       |
-| ------------------ | ------------------------------------------- |
-| `NODE_ENV`         | `production`                                |
-| `MONGO_URI`        | MongoDB Atlas connection string             |
-| `JWT_SECRET`       | Random 64-char hex (`openssl rand -hex 32`) |
-| `JWT_EXPIRES_IN`   | `7d`                                        |
-| `CLIENT_URL`       | Netlify frontend URL                        |
-| `CLOUDINARY_*`     | Cloudinary credentials                      |
-| `ADMIN_EMAIL`      | Admin email address                         |
-| `ADMIN_PASSWORD`   | Strong password (min 8 chars)               |
-| `SMTP_*`           | SMTP credentials                            |
-| `CONTACT_TO_EMAIL` | Contact form recipient email                |
-
-4. Deploy and verify: `GET https://your-app.onrender.com/api/health`.
-5. Run `npm run seed` via Render Shell tab if needed.
-
-### Frontend — Netlify
-
-1. Create a new site on [Netlify](https://www.netlify.com) and connect your GitHub repository.
-2. Configure the build:
-   - **Base Directory:** `client`
-   - **Build Command:** `npm run build`
-   - **Publish Directory:** `client/dist`
-3. Add environment variable: `VITE_API_URL` = Render URL + `/api` (e.g. `https://your-app.onrender.com/api`).
-4. Deploy.
-
-> **Note:** SPA client-side routing is handled by `client/netlify.toml` — all routes redirect to `index.html`.
-
-### Post-Deployment
-
-- Update `CLIENT_URL` on Render to your exact Netlify URL (no trailing slash).
-- Redeploy the backend for CORS to take effect.
-
-### Custom Domain (Optional)
-
-- **Netlify:** Site Settings → Domain Management → Add custom domain → Configure DNS.
-- **Render:** Settings → Custom Domains → Add domain (e.g. `api.yourname.dev`) → Configure DNS.
-- Update `VITE_API_URL` and `CLIENT_URL` accordingly.
-
-## Environment Variables
-
-### Server (`server/.env`)
+**server/.env**
 
 ```env
 NODE_ENV=development
@@ -228,12 +105,391 @@ SMTP_PASS=your_app_password
 CONTACT_TO_EMAIL=your_email@gmail.com
 ```
 
-### Client (`client/.env`)
+**client/.env**
 
 ```env
 VITE_API_URL=http://localhost:5000/api
 ```
 
+**3. Install dependencies:**
+
+```bash
+cd server && npm install
+cd ../client && npm install
+```
+
+**4. Seed the admin user:**
+
+```bash
+cd ../server && npm run seed
+```
+
+**5. Run the application:**
+
+```bash
+# Terminal 1 — Backend
+cd server && npm run dev
+
+# Terminal 2 — Frontend
+cd client && npm run dev
+```
+
+The frontend runs at `http://localhost:5173` and the backend at `http://localhost:5000`.
+
+---
+
+## Usage
+
+1. **Visit the portfolio** — Open `http://localhost:5173` to see the public-facing portfolio
+2. **Navigate to admin** — Go to `/admin/login` and sign in with the `ADMIN_EMAIL` and `ADMIN_PASSWORD` from your `.env`
+3. **Manage projects** — Add, edit, delete, and reorder projects; upload images via Cloudinary; toggle featured/draft status
+4. **Manage skills** — Create skills with categories (frontend, backend, database, devops, tools) and proficiency levels
+5. **View dashboard** — See stats overview for total projects, skills, and content status
+6. **Contact form** — Visitors can send messages from the public portfolio; you receive them via email
+7. **Logout** — Click logout from the admin panel to end the session
+
+---
+
+## How It Works?
+
+### Authentication Flow
+
+The application uses a single-admin JWT authentication model. The admin user is created via a seed script (`npm run seed`) that reads credentials from environment variables. On login, the server validates credentials with bcrypt, generates a JWT token with an expiration time, and returns it to the client. The client stores the token in `localStorage` and attaches it to every subsequent API request via an Axios request interceptor.
+
+```javascript
+// Axios interceptor — auto-attaches JWT to requests
+requestInterceptor: (config) => {
+  const token = localStorage.getItem("portfolio_token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+}
+```
+
+### Route Protection
+
+On the frontend, `AdminRoute` and `GuestOnlyRoute` guards wrap protected routes. `AdminRoute` checks `AuthContext` for an authenticated admin user before rendering child routes; otherwise, it redirects to `/admin/login`. On the backend, `protect` middleware verifies the JWT, and `adminOnly` middleware checks the user role.
+
+### Data Flow
+
+1. **Public visitors** → React fetches published projects and skills from public API endpoints (no auth required)
+2. **Admin** → Authenticated requests hit protected endpoints → Express validates input with `express-validator` → Controllers interact with Mongoose models → Response sent back to client
+3. **Image uploads** → Multer processes the file in memory → Controller uploads to Cloudinary → URL and public ID stored in MongoDB
+4. **Contact form** → Validated message data → Nodemailer sends email via SMTP → Toast confirmation shown to visitor
+
+---
+
+## API Endpoints
+
+| Method   | Endpoint                   | Auth       | Description              |
+| -------- | -------------------------- | ---------- | ------------------------ |
+| `POST`   | `/api/auth/login`          | No         | Admin login              |
+| `GET`    | `/api/auth/me`             | JWT        | Get current user         |
+| `GET`    | `/api/projects`            | No         | Get published projects   |
+| `GET`    | `/api/projects/admin/all`  | JWT+Admin  | Get all projects (admin) |
+| `GET`    | `/api/projects/:slug`      | No         | Get project by slug      |
+| `POST`   | `/api/projects`            | JWT+Admin  | Create project           |
+| `PUT`    | `/api/projects/:id`        | JWT+Admin  | Update project           |
+| `DELETE` | `/api/projects/:id`        | JWT+Admin  | Delete project           |
+| `POST`   | `/api/projects/:id/image`  | JWT+Admin  | Upload project image     |
+| `DELETE` | `/api/projects/:id/image`  | JWT+Admin  | Delete project image     |
+| `GET`    | `/api/skills`              | No         | Get all skills           |
+| `POST`   | `/api/skills`              | JWT+Admin  | Create skill             |
+| `PUT`    | `/api/skills/:id`          | JWT+Admin  | Update skill             |
+| `DELETE` | `/api/skills/:id`          | JWT+Admin  | Delete skill             |
+| `POST`   | `/api/contact`             | No         | Send contact message     |
+| `GET`    | `/api/health`              | No         | Health check             |
+
+> Auth endpoints require `Authorization: Bearer <token>` header.
+
+---
+
+## Project Structure
+
+```
+portfolio-with-admin-panel/
+├── client/                          # React frontend (Vite)
+│   ├── src/
+│   │   ├── api/
+│   │   │   └── axiosInstance.js      # Axios config with interceptors
+│   │   ├── components/
+│   │   │   ├── admin/                # Admin panel components
+│   │   │   │   ├── AdminStats.jsx    # Dashboard statistics
+│   │   │   │   ├── ImageUploader.jsx # Cloudinary image upload
+│   │   │   │   ├── ProjectForm.jsx   # Project create/edit form
+│   │   │   │   ├── ProjectTable.jsx  # Project list table
+│   │   │   │   ├── SkillForm.jsx     # Skill create/edit form
+│   │   │   │   └── SkillTable.jsx    # Skill list table
+│   │   │   ├── layout/               # Layout components
+│   │   │   │   ├── AdminLayout.jsx   # Admin panel layout wrapper
+│   │   │   │   ├── Footer.jsx        # Public footer
+│   │   │   │   ├── MainLayout.jsx    # Public layout wrapper
+│   │   │   │   └── Navbar.jsx        # Public navigation bar
+│   │   │   ├── sections/             # Portfolio sections
+│   │   │   │   ├── About.jsx         # About section
+│   │   │   │   ├── Contact.jsx       # Contact form section
+│   │   │   │   ├── Hero.jsx          # Hero/landing section
+│   │   │   │   ├── Projects.jsx      # Projects showcase
+│   │   │   │   └── Skills.jsx        # Skills display
+│   │   │   └── ui/                   # Reusable UI components
+│   │   │       ├── AnimatedCounter.jsx
+│   │   │       ├── ConfirmModal.jsx
+│   │   │       ├── FeaturedProjectCard.jsx
+│   │   │       ├── GlassCard.jsx
+│   │   │       ├── GradientText.jsx
+│   │   │       ├── ProjectCard.jsx
+│   │   │       ├── ScrollProgressBar.jsx
+│   │   │       ├── ScrollToTop.jsx
+│   │   │       ├── SectionHeading.jsx
+│   │   │       ├── SectionWrapper.jsx
+│   │   │       ├── Skeleton.jsx
+│   │   │       ├── SkillBar.jsx
+│   │   │       ├── Spinner.jsx
+│   │   │       ├── StatusBadge.jsx
+│   │   │       └── TechBadge.jsx
+│   │   ├── contexts/
+│   │   │   └── AuthContext.jsx       # Auth state management
+│   │   ├── guards/
+│   │   │   ├── AdminRoute.jsx        # Protected admin route guard
+│   │   │   └── GuestOnlyRoute.jsx    # Guest-only route guard
+│   │   ├── hooks/
+│   │   │   ├── useDebounce.js        # Debounce hook
+│   │   │   ├── useMediaQuery.js      # Responsive media query hook
+│   │   │   └── useScrollSpy.js       # Scroll spy for active nav
+│   │   ├── pages/
+│   │   │   ├── AdminDashboardPage.jsx
+│   │   │   ├── AdminLoginPage.jsx
+│   │   │   ├── AdminProjectsPage.jsx
+│   │   │   ├── AdminSkillsPage.jsx
+│   │   │   ├── HomePage.jsx
+│   │   │   └── NotFoundPage.jsx
+│   │   ├── services/
+│   │   │   ├── authService.js        # Auth API calls
+│   │   │   ├── contactService.js     # Contact API calls
+│   │   │   ├── projectService.js     # Project API calls
+│   │   │   └── skillService.js       # Skill API calls
+│   │   ├── utils/
+│   │   │   ├── animations.js         # Framer Motion variants
+│   │   │   └── constants.js          # App constants
+│   │   ├── App.jsx                   # Root component with routing
+│   │   ├── main.jsx                  # Entry point
+│   │   └── index.css                 # Global styles (Tailwind)
+│   ├── netlify.toml                  # SPA redirect & build config
+│   └── vite.config.js                # Vite configuration
+│
+├── server/                           # Express backend
+│   ├── config/
+│   │   ├── db.js                     # MongoDB connection
+│   │   └── env.js                    # Environment config loader
+│   ├── controllers/
+│   │   ├── authController.js         # Auth handlers
+│   │   ├── contactController.js      # Contact form handler
+│   │   ├── projectController.js      # Project CRUD handlers
+│   │   └── skillController.js        # Skill CRUD handlers
+│   ├── middlewares/
+│   │   ├── auth.js                   # JWT protect & adminOnly
+│   │   ├── errorHandler.js           # Global error handler
+│   │   ├── rateLimiter.js            # Rate limiting configs
+│   │   ├── uploadMiddleware.js       # Multer image upload
+│   │   └── validate.js              # express-validator runner
+│   ├── models/
+│   │   ├── User.js                   # User schema (admin)
+│   │   ├── Project.js                # Project schema
+│   │   └── Skill.js                  # Skill schema
+│   ├── routes/
+│   │   ├── authRoutes.js             # Auth endpoints
+│   │   ├── contactRoutes.js          # Contact endpoints
+│   │   ├── projectRoutes.js          # Project endpoints
+│   │   └── skillRoutes.js            # Skill endpoints
+│   ├── utils/
+│   │   ├── cloudinary.js             # Cloudinary config
+│   │   ├── helpers.js                # Utility functions
+│   │   └── sendEmail.js              # Nodemailer transporter
+│   ├── validators/
+│   │   ├── authValidator.js          # Auth validation rules
+│   │   ├── contactValidator.js       # Contact validation rules
+│   │   ├── projectValidator.js       # Project validation rules
+│   │   └── skillValidator.js         # Skill validation rules
+│   ├── index.js                      # Express entry point
+│   ├── seed.js                       # Admin user seeder
+│   └── .env.example                  # Environment template
+│
+└── README.md
+```
+
+---
+
+## Security
+
+- **Helmet** — Sets secure HTTP headers to protect against common web vulnerabilities
+- **CORS** — Strict origin whitelist; no wildcards in production, only the configured `CLIENT_URL` is allowed
+- **Rate Limiting** — Multiple tiers: global (100/15min), auth (10/15min), contact (5/hour), upload (20/15min)
+- **express-mongo-sanitize** — Strips `$` and `.` from user input to prevent NoSQL injection attacks
+- **hpp** — HTTP parameter pollution protection to prevent query string manipulation
+- **bcryptjs** — Password hashing with 12 salt rounds; passwords are never stored in plain text
+- **JWT** — Stateless authentication with configurable expiration; tokens are validated on every protected request
+- **Input Validation** — All endpoints validated with express-validator; structured error responses
+- **File Upload Restrictions** — Multer enforces JPEG/PNG/WebP only, 5MB max file size, memory storage
+- **Request Size Limits** — JSON and URL-encoded body parsing limited to 10KB
+
+---
+
+## Deployment
+
+### Backend — Render
+
+1. Create a new **Web Service** on [Render](https://render.com) and connect your GitHub repository.
+2. Configure the service:
+   - **Root Directory:** `server`
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+   - **Environment:** `Node`
+3. Add environment variables:
+
+| Variable              | Value                                         |
+| --------------------- | --------------------------------------------- |
+| `NODE_ENV`            | `production`                                  |
+| `MONGO_URI`           | MongoDB Atlas connection string               |
+| `JWT_SECRET`          | Random 64-char hex (`openssl rand -hex 32`)   |
+| `JWT_EXPIRES_IN`      | `7d`                                          |
+| `CLIENT_URL`          | Netlify frontend URL (no trailing slash)      |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary dashboard → Cloud name          |
+| `CLOUDINARY_API_KEY`  | Cloudinary dashboard → API Key                |
+| `CLOUDINARY_API_SECRET` | Cloudinary dashboard → API Secret           |
+| `ADMIN_EMAIL`         | Admin email address                           |
+| `ADMIN_PASSWORD`      | Strong password (min 8 chars)                 |
+| `SMTP_HOST`           | `smtp.gmail.com`                              |
+| `SMTP_PORT`           | `587`                                         |
+| `SMTP_USER`           | Your Gmail address                            |
+| `SMTP_PASS`           | Gmail App Password                            |
+| `CONTACT_TO_EMAIL`    | Contact form recipient email                  |
+
+4. Deploy and verify: `GET https://your-app.onrender.com/api/health`
+5. Run `npm run seed` via Render Shell tab to create the admin user.
+
+### Frontend — Netlify
+
+1. Create a new site on [Netlify](https://www.netlify.com) and connect your GitHub repository.
+2. Configure the build:
+   - **Base Directory:** `client`
+   - **Build Command:** `npm run build`
+   - **Publish Directory:** `client/dist`
+3. Add environment variable:
+
+| Variable       | Value                                           |
+| -------------- | ----------------------------------------------- |
+| `VITE_API_URL` | Render backend URL + `/api` (e.g. `https://your-app.onrender.com/api`) |
+
+4. Deploy.
+
+> **Note:** SPA client-side routing is handled by `client/netlify.toml` — all routes redirect to `index.html`.
+
+### MongoDB Atlas Setup
+
+1. Create a free cluster on [MongoDB Atlas](https://www.mongodb.com/atlas).
+2. Create a database user with a **strong generated password** (different from `ADMIN_PASSWORD`).
+3. Network Access: add `0.0.0.0/0` to allow connections from Render.
+4. Get the connection string (`mongodb+srv://...`). **Never commit it.**
+
+### Post-Deployment
+
+- Update `CLIENT_URL` on Render to your exact Netlify URL (no trailing slash).
+- Redeploy the backend for CORS to take effect.
+- Run the seed script via Render Shell to create the admin user in production.
+
+### Custom Domain (Optional)
+
+- **Netlify:** Site Settings → Domain Management → Add custom domain → Configure DNS.
+- **Render:** Settings → Custom Domains → Add domain (e.g. `api.yourname.dev`) → Configure DNS.
+- Update `VITE_API_URL` and `CLIENT_URL` accordingly.
+
+---
+
+## Features in Detail
+
+### Completed Features
+
+- ✅ Responsive single-page portfolio with glassmorphism dark theme
+- ✅ Framer Motion scroll animations and page transitions
+- ✅ Admin dashboard with project and skill statistics
+- ✅ Full CRUD for projects with image upload (Cloudinary)
+- ✅ Full CRUD for skills with category grouping
+- ✅ Featured project highlighting with custom ordering
+- ✅ Draft/Published status management for projects
+- ✅ Contact form with SMTP email notifications
+- ✅ JWT authentication with protected routes
+- ✅ SEO optimization with react-helmet-async
+- ✅ Scroll progress bar and animated counters
+- ✅ Skeleton loading states for better UX
+- ✅ Toast notifications for all user actions
+- ✅ Custom hooks (useDebounce, useMediaQuery, useScrollSpy)
+- ✅ Production security hardening (Helmet, CORS, rate limiting, sanitization)
+
+### Future Features
+
+- 🔮 [ ] Blog section with rich text editor
+- 🔮 [ ] Analytics dashboard with visitor tracking
+- 🔮 [ ] Dark/Light theme toggle for visitors
+- 🔮 [ ] Multi-language support (i18n)
+- 🔮 [ ] Resume/CV download feature
+
+---
+
+## Contributing
+
+1. **Fork** the repository
+2. **Create** your feature branch (`git checkout -b feat/amazing-feature`)
+3. **Commit** your changes (`git commit -m "feat: add amazing feature"`)
+4. **Push** to the branch (`git push origin feat/amazing-feature`)
+5. **Open** a Pull Request
+
+### Commit Message Format
+
+| Prefix      | Description                        |
+| ----------- | ---------------------------------- |
+| `feat:`     | New feature                        |
+| `fix:`      | Bug fix                            |
+| `refactor:` | Code refactoring                   |
+| `docs:`     | Documentation changes              |
+| `chore:`    | Maintenance and dependency updates |
+
+---
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## Developer
+
+**Serkan Bayraktar**
+
+- 🌐 [serkanbayraktar.com](https://serkanbayraktar.com/)
+- 🐙 [@Serkanbyx](https://github.com/Serkanbyx)
+- 📧 serkanbyx1@gmail.com
+
+---
+
+## Acknowledgments
+
+- [React](https://react.dev/) — UI library
+- [Vite](https://vite.dev/) — Build tool
+- [Tailwind CSS](https://tailwindcss.com/) — CSS framework
+- [Framer Motion](https://motion.dev/) — Animation library
+- [Express](https://expressjs.com/) — Web framework
+- [MongoDB](https://www.mongodb.com/) — Database
+- [Cloudinary](https://cloudinary.com/) — Image management
+- [Render](https://render.com/) — Backend hosting
+- [Netlify](https://www.netlify.com/) — Frontend hosting
+
+---
+
+## Contact
+
+- 📋 [Open an Issue](https://github.com/Serkanbyx/portfolio-with-admin-panel/issues)
+- 📧 serkanbyx1@gmail.com
+- 🌐 [serkanbayraktar.com](https://serkanbayraktar.com/)
+
+---
+
+⭐ If you like this project, don't forget to give it a star!
