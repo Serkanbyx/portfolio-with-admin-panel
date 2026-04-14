@@ -95,20 +95,19 @@ const sendContactMessage = async (req, res) => {
       </html>
     `;
 
-    const [savedMessage] = await Promise.all([
-      Message.create({
-        name: name.trim(),
-        email: email.trim(),
-        message: message.trim(),
-      }),
-      sendEmail({
-        from: config.smtpUser,
-        to: config.contactToEmail,
-        replyTo: email.trim(),
-        subject: `Portfolio Contact: ${safeName}`,
-        html,
-      }),
-    ]);
+    const savedMessage = await Message.create({
+      name: name.trim(),
+      email: email.trim(),
+      message: message.trim(),
+    });
+
+    sendEmail({
+      from: config.smtpUser,
+      to: config.contactToEmail,
+      replyTo: email.trim(),
+      subject: `Portfolio Contact: ${safeName}`,
+      html,
+    }).catch((err) => console.error("Contact email delivery failed:", err.message));
 
     res.status(200).json({
       success: true,
@@ -116,7 +115,7 @@ const sendContactMessage = async (req, res) => {
       data: { id: savedMessage._id },
     });
   } catch (error) {
-    console.error("Contact email error:", error.message);
+    console.error("Contact save error:", error.message);
 
     res.status(500).json({
       success: false,
