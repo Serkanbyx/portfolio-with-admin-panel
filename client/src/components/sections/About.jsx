@@ -11,9 +11,10 @@ import {
   scaleIn,
   staggerContainer,
 } from "../../utils/animations";
-import siteConfig from "../../config/siteConfig";
+import { useSettings } from "../../contexts/SettingsContext";
 
 const About = () => {
+  const { settings } = useSettings();
   const leftRef = useRef(null);
   const rightRef = useRef(null);
   const statsRef = useRef(null);
@@ -56,13 +57,13 @@ const About = () => {
           animate={isRightInView ? "visible" : "hidden"}
         >
           <div className="space-y-4 text-dark-300 leading-relaxed text-lg">
-            {siteConfig.bio.map((paragraph, index) => (
+            {settings.bio.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
           </div>
 
           <p className="mt-6 text-primary-400 font-mono text-sm">
-            {siteConfig.techStack}
+            {settings.techStack}
           </p>
         </motion.div>
       </div>
@@ -75,7 +76,7 @@ const About = () => {
         animate={isStatsInView ? "visible" : "hidden"}
         className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12"
       >
-        {siteConfig.stats.map((stat) => (
+        {settings.stats.map((stat) => (
           <motion.div key={stat.label} variants={scaleIn}>
             <GlassCard className="text-center">
               <div className="text-3xl font-bold text-primary-400">

@@ -1,4 +1,4 @@
-import { FiFolder, FiCheckCircle, FiEdit, FiCode } from "react-icons/fi";
+import { FiFolder, FiCheckCircle, FiEdit, FiCode, FiMail } from "react-icons/fi";
 
 import GlassCard from "../ui/GlassCard";
 
@@ -31,18 +31,26 @@ const STATS_CONFIG = [
     iconColor: "text-accent-400",
     iconBg: "bg-accent-500/10",
   },
+  {
+    key: "unreadMessages",
+    label: "Unread Messages",
+    icon: FiMail,
+    iconColor: "text-blue-400",
+    iconBg: "bg-blue-400/10",
+  },
 ];
 
-const AdminStats = ({ projects = [], skills = [] }) => {
+const AdminStats = ({ projects = [], skills = [], messages = [] }) => {
   const statsValues = {
     totalProjects: projects.length,
     published: projects.filter((p) => p.status === "published").length,
     drafts: projects.filter((p) => p.status === "draft").length,
     totalSkills: skills.length,
+    unreadMessages: messages.filter((m) => !m.isRead).length,
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
       {STATS_CONFIG.map(({ key, label, icon: Icon, iconColor, iconBg }) => (
         <GlassCard key={key} padding="p-5">
           <div className={`w-10 h-10 rounded-full ${iconBg} flex items-center justify-center mb-3`}>

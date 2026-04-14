@@ -4,7 +4,8 @@ import { FiMenu, FiX, FiGithub, FiLinkedin } from "react-icons/fi";
 import { FaXTwitter } from "react-icons/fa6";
 import GradientText from "../ui/GradientText";
 import useScrollSpy from "../../hooks/useScrollSpy";
-import { NAV_LINKS, SOCIAL_LINKS } from "../../utils/constants";
+import { NAV_LINKS } from "../../utils/constants";
+import { useSettings } from "../../contexts/SettingsContext";
 
 const SOCIAL_ICON_MAP = {
   FiGithub: FiGithub,
@@ -15,6 +16,7 @@ const SOCIAL_ICON_MAP = {
 const sectionIds = NAV_LINKS.map((link) => link.href.replace("#", ""));
 
 const Navbar = () => {
+  const { initials, socialLinks } = useSettings();
   const [scrollY, setScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const activeId = useScrollSpy(sectionIds);
@@ -66,7 +68,7 @@ const Navbar = () => {
           onClick={(e) => handleNavClick(e, "#hero")}
           className="text-2xl font-bold"
         >
-          <GradientText>YN</GradientText>
+          <GradientText>{initials}</GradientText>
         </a>
 
         {/* Desktop Navigation */}
@@ -184,7 +186,7 @@ const Navbar = () => {
                 }}
                 transition={{ duration: 0.3, delay: 0.2 }}
               >
-                {SOCIAL_LINKS.map((social) => {
+                {socialLinks.map((social) => {
                   const Icon = SOCIAL_ICON_MAP[social.icon];
                   if (!Icon) return null;
                   return (

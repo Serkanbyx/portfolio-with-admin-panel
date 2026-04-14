@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { NavLink, Outlet, Link } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { NavLink, Outlet, Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiShield,
@@ -15,6 +15,7 @@ import {
 } from "react-icons/fi";
 import { useAuth } from "../../contexts/AuthContext";
 import GradientText from "../ui/GradientText";
+import * as messageService from "../../services/messageService";
 
 const NAV_LINKS = [
   { to: "/admin", label: "Dashboard", icon: FiHome, end: true },
@@ -31,7 +32,7 @@ const navLinkClasses = ({ isActive }) =>
       : "text-dark-400 hover:text-dark-100 hover:bg-dark-800/50"
   }`;
 
-const SidebarContent = ({ onClose }) => {
+const SidebarContent = ({ onClose, unreadCount = 0 }) => {
   const { logout } = useAuth();
 
   return (
@@ -67,7 +68,12 @@ const SidebarContent = ({ onClose }) => {
             onClick={onClose}
           >
             <Icon size={18} />
-            <span>{label}</span>
+            <span className="flex-1">{label}</span>
+            {label === "Messages" && unreadCount > 0 && (
+              <span className="bg-primary-500 text-white text-xs font-bold min-w-[20px] h-5 flex items-center justify-center rounded-full px-1.5">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>
@@ -99,6 +105,22 @@ const SidebarContent = ({ onClose }) => {
 
 const AdminLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const location = useLocation();
+
+  const fetchUnreadCount = useCallback(async () => {
+    try {
+      const res = await messageService.getMessages();
+      const messages = res.data?.data || [];
+      setUnreadCount(messages.filter((m) => !m.isRead).length);
+    } catch {
+      /* silent */
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUnreadCount();
+  }, [fetchUnreadCount, location.pathname]);
 
   const closeMobile = () => setIsMobileOpen(false);
 
@@ -106,7 +128,7 @@ const AdminLayout = () => {
     <div className="min-h-screen bg-dark-950">
       {/* Desktop Sidebar */}
       <aside className="hidden lg:flex fixed inset-y-0 left-0 w-64 flex-col bg-dark-900 border-r border-dark-800 z-30">
-        <SidebarContent />
+        <SidebarContent unreadCount={unreadCount} />
       </aside>
 
       {/* Mobile Top Bar */}
@@ -142,7 +164,7 @@ const AdminLayout = () => {
               transition={{ type: "tween", duration: 0.25 }}
               className="fixed inset-y-0 left-0 w-[280px] bg-dark-900 border-r border-dark-800 z-50 lg:hidden"
             >
-              <SidebarContent onClose={closeMobile} />
+              <SidebarContent onClose={closeMobile} unreadCount={unreadCount} />
             </motion.aside>
           </>
         )}

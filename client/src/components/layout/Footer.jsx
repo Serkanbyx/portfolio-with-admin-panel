@@ -1,7 +1,6 @@
 import { FiGithub, FiLinkedin } from "react-icons/fi";
 import { FaXTwitter } from "react-icons/fa6";
-import { SOCIAL_LINKS } from "../../utils/constants";
-import siteConfig from "../../config/siteConfig";
+import { useSettings } from "../../contexts/SettingsContext";
 
 const SOCIAL_ICON_MAP = {
   FiGithub: FiGithub,
@@ -10,6 +9,8 @@ const SOCIAL_ICON_MAP = {
 };
 
 const Footer = () => {
+  const { settings, socialLinks } = useSettings();
+
   return (
     <footer className="relative bg-dark-900/50 border-t border-dark-800">
       {/* Gradient top border */}
@@ -19,7 +20,7 @@ const Footer = () => {
         <div className="flex flex-col items-center gap-4">
           {/* Social Links */}
           <div className="flex items-center gap-4">
-            {SOCIAL_LINKS.map((social) => {
+            {socialLinks.map((social) => {
               const Icon = SOCIAL_ICON_MAP[social.icon];
               if (!Icon) return null;
               return (
@@ -39,7 +40,7 @@ const Footer = () => {
 
           {/* Copyright */}
           <p className="text-dark-500 text-sm">
-            &copy; {new Date().getFullYear()} {siteConfig.name}. Built with React
+            &copy; {new Date().getFullYear()} {settings.name}. Built with React
             &amp; Node.js
           </p>
 

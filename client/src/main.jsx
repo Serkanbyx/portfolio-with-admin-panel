@@ -3,14 +3,16 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./contexts/AuthContext";
+import { SettingsProvider } from "./contexts/SettingsContext";
 import App from "./App";
 import "./index.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <App />
+      <SettingsProvider>
+        <AuthProvider>
+          <App />
         <Toaster
           position="top-right"
           containerStyle={{ top: 88 }}
@@ -35,7 +37,8 @@ createRoot(document.getElementById("root")).render(
             },
           }}
         />
-      </AuthProvider>
+        </AuthProvider>
+      </SettingsProvider>
     </BrowserRouter>
   </StrictMode>
 );

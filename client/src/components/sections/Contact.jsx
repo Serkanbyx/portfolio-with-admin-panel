@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import {
   FiMail,
@@ -16,7 +16,6 @@ import SectionWrapper from "../ui/SectionWrapper";
 import SectionHeading from "../ui/SectionHeading";
 import GlassCard from "../ui/GlassCard";
 import Spinner from "../ui/Spinner";
-import { SOCIAL_LINKS } from "../../utils/constants";
 import {
   scaleIn,
   fadeInLeft,
@@ -25,32 +24,13 @@ import {
   staggerContainer,
 } from "../../utils/animations";
 import * as contactService from "../../services/contactService";
-import siteConfig from "../../config/siteConfig";
+import { useSettings } from "../../contexts/SettingsContext";
 
 const SOCIAL_ICON_MAP = {
   FiGithub,
   FiLinkedin,
   FaXTwitter,
 };
-
-const CONTACT_INFO = [
-  {
-    icon: FiMail,
-    label: siteConfig.email,
-    href: `mailto:${siteConfig.email}`,
-    type: "link",
-  },
-  {
-    icon: FiMapPin,
-    label: siteConfig.location,
-    type: "text",
-  },
-  {
-    icon: FiCheckCircle,
-    label: siteConfig.availabilityText,
-    type: "availability",
-  },
-];
 
 const INITIAL_FORM_DATA = { name: "", email: "", message: "" };
 const INITIAL_ERRORS = { name: "", email: "", message: "" };
@@ -116,6 +96,26 @@ const getCharCountColor = (length) => {
 };
 
 const Contact = () => {
+  const { settings, socialLinks } = useSettings();
+
+  const contactInfo = useMemo(
+    () => [
+      {
+        icon: FiMail,
+        label: settings.email,
+        href: `mailto:${settings.email}`,
+        type: "link",
+      },
+      { icon: FiMapPin, label: settings.location, type: "text" },
+      {
+        icon: FiCheckCircle,
+        label: settings.availabilityText,
+        type: "availability",
+      },
+    ],
+    [settings.email, settings.location, settings.availabilityText]
+  );
+
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const [errors, setErrors] = useState(INITIAL_ERRORS);
   const [touched, setTouched] = useState(INITIAL_TOUCHED);
@@ -216,7 +216,7 @@ const Contact = () => {
           </p>
 
           <div className="space-y-4">
-            {CONTACT_INFO.map((item) => (
+            {contactInfo.map((item) => (
               <GlassCard key={item.label} padding="p-4">
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-lg bg-primary-500/10 text-primary-400 flex items-center justify-center">
@@ -250,7 +250,7 @@ const Contact = () => {
           <div className="mt-8">
             <p className="text-dark-500 text-sm mb-3">Find me on</p>
             <div className="flex items-center gap-4">
-              {SOCIAL_LINKS.map((social) => {
+              {socialLinks.map((social) => {
                 const Icon = SOCIAL_ICON_MAP[social.icon];
                 if (!Icon) return null;
                 return (

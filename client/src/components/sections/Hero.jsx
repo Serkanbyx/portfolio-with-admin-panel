@@ -4,15 +4,7 @@ import { FiArrowDown, FiMail, FiGithub, FiLinkedin, FiChevronDown } from "react-
 import { FaXTwitter } from "react-icons/fa6";
 import GradientText from "../ui/GradientText";
 import { fadeInUp, staggerContainer } from "../../utils/animations";
-import { SOCIAL_LINKS } from "../../utils/constants";
-import siteConfig from "../../config/siteConfig";
-
-const HERO_CONTENT = {
-  greeting: siteConfig.greeting,
-  name: siteConfig.name,
-  role: siteConfig.role,
-  tagline: siteConfig.tagline,
-};
+import { useSettings } from "../../contexts/SettingsContext";
 
 const ICON_MAP = {
   FiGithub,
@@ -21,6 +13,7 @@ const ICON_MAP = {
 };
 
 const Hero = () => {
+  const { settings, socialLinks } = useSettings();
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
   useEffect(() => {
@@ -82,28 +75,28 @@ const Hero = () => {
           className="text-primary-400 text-lg font-mono tracking-wider mb-4"
           variants={fadeInUp}
         >
-          {HERO_CONTENT.greeting}
+          {settings.greeting}
         </motion.p>
 
         <motion.h1
           className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-4"
           variants={fadeInUp}
         >
-          <GradientText>{HERO_CONTENT.name}</GradientText>
+          <GradientText>{settings.name}</GradientText>
         </motion.h1>
 
         <motion.p
           className="text-xl sm:text-2xl text-dark-300 font-light mb-6"
           variants={fadeInUp}
         >
-          {HERO_CONTENT.role}
+          {settings.role}
         </motion.p>
 
         <motion.p
           className="text-dark-400 max-w-xl mx-auto text-lg leading-relaxed mb-10"
           variants={fadeInUp}
         >
-          {HERO_CONTENT.tagline}
+          {settings.tagline}
         </motion.p>
 
         {/* CTA Buttons */}
@@ -134,7 +127,7 @@ const Hero = () => {
 
         {/* Social Icons */}
         <motion.div className="flex gap-6 justify-center" variants={fadeInUp}>
-          {SOCIAL_LINKS.map((link) => {
+          {socialLinks.map((link) => {
             const Icon = ICON_MAP[link.icon];
             return (
               <a

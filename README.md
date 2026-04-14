@@ -14,6 +14,9 @@ A modern, production-ready portfolio website with a **CMS-like admin panel**, bu
 - **Project Management** — Full CRUD operations with Cloudinary image uploads, featured project highlighting, and draft/published status
 - **Skill Management** — Create, edit, and delete skills with category grouping and proficiency levels (0–100)
 - **Contact Form** — Visitors can send messages directly; admin receives email notifications via Nodemailer (SMTP)
+- **Message Inbox** — Admin inbox to view, read, and manage contact form submissions with read/unread status
+- **Site Settings** — Dynamic site configuration (name, role, bio, social links) editable from admin panel; changes reflect on the public portfolio in real-time via SettingsContext
+- **Unread Message Badge** — Admin sidebar shows live unread message count; dashboard displays message statistics
 - **SEO Optimized** — Server-side meta tags with react-helmet-async and Open Graph support
 - **Scroll Progress Bar** — Visual scroll indicator, animated counters, and micro-interactions throughout the UI
 - **Route Protection** — Admin routes are guarded; unauthenticated users are redirected to login
@@ -83,6 +86,7 @@ cd portfolio-with-admin-panel
 
 ```bash
 cp server/.env.example server/.env
+cp client/.env.example client/.env
 ```
 
 **server/.env**
@@ -147,7 +151,9 @@ The frontend runs at `http://localhost:5173` and the backend at `http://localhos
 4. **Manage skills** — Create skills with categories (frontend, backend, database, devops, tools) and proficiency levels
 5. **View dashboard** — See stats overview for total projects, skills, and content status
 6. **Contact form** — Visitors can send messages from the public portfolio; you receive them via email
-7. **Logout** — Click logout from the admin panel to end the session
+7. **Message inbox** — View and manage contact form submissions from the admin panel; messages are marked as read automatically
+8. **Site settings** — Update your name, role, bio, profile image URL, and social links from the settings page
+9. **Logout** — Click logout from the admin panel to end the session
 
 ---
 
@@ -172,10 +178,11 @@ On the frontend, `AdminRoute` and `GuestOnlyRoute` guards wrap protected routes.
 
 ### Data Flow
 
-1. **Public visitors** → React fetches published projects and skills from public API endpoints (no auth required)
+1. **Public visitors** → React fetches published projects, skills, and site settings from public API endpoints (no auth required) → SettingsContext merges API data with siteConfig defaults
 2. **Admin** → Authenticated requests hit protected endpoints → Express validates input with `express-validator` → Controllers interact with Mongoose models → Response sent back to client
 3. **Image uploads** → Multer processes the file in memory → Controller uploads to Cloudinary → URL and public ID stored in MongoDB
-4. **Contact form** → Validated message data → Nodemailer sends email via SMTP → Toast confirmation shown to visitor
+4. **Contact form** → Validated message data → Stored in Messages collection → Nodemailer sends email via SMTP → Toast confirmation shown to visitor
+5. **Settings sync** → Admin edits site settings → Saved to MongoDB → Public portfolio reads updated settings via SettingsContext on next visit
 
 ---
 
@@ -198,6 +205,11 @@ On the frontend, `AdminRoute` and `GuestOnlyRoute` guards wrap protected routes.
 | `PUT`    | `/api/skills/:id`          | JWT+Admin  | Update skill             |
 | `DELETE` | `/api/skills/:id`          | JWT+Admin  | Delete skill             |
 | `POST`   | `/api/contact`             | No         | Send contact message     |
+| `GET`    | `/api/messages`            | JWT+Admin  | Get all messages         |
+| `PATCH`  | `/api/messages/:id/read`   | JWT+Admin  | Mark message as read     |
+| `DELETE` | `/api/messages/:id`        | JWT+Admin  | Delete message           |
+| `GET`    | `/api/settings`            | No         | Get site settings        |
+| `PUT`    | `/api/settings`            | JWT+Admin  | Update site settings     |
 | `GET`    | `/api/health`              | No         | Health check             |
 | `GET`    | `/api-docs`                | No         | Swagger API documentation|
 
@@ -238,6 +250,7 @@ portfolio-with-admin-panel/
 │   │   │       ├── FeaturedProjectCard.jsx
 │   │   │       ├── GlassCard.jsx
 │   │   │       ├── GradientText.jsx
+│   │   │       ├── ProfileAvatar.jsx
 │   │   │       ├── ProjectCard.jsx
 │   │   │       ├── ScrollProgressBar.jsx
 │   │   │       ├── ScrollToTop.jsx
@@ -249,7 +262,8 @@ portfolio-with-admin-panel/
 │   │   │       ├── StatusBadge.jsx
 │   │   │       └── TechBadge.jsx
 │   │   ├── contexts/
-│   │   │   └── AuthContext.jsx       # Auth state management
+│   │   │   ├── AuthContext.jsx       # Auth state management
+│   │   │   └── SettingsContext.jsx   # Dynamic site settings from API
 │   │   ├── guards/
 │   │   │   ├── AdminRoute.jsx        # Protected admin route guard
 │   │   │   └── GuestOnlyRoute.jsx    # Guest-only route guard
@@ -257,17 +271,23 @@ portfolio-with-admin-panel/
 │   │   │   ├── useDebounce.js        # Debounce hook
 │   │   │   ├── useMediaQuery.js      # Responsive media query hook
 │   │   │   └── useScrollSpy.js       # Scroll spy for active nav
+│   │   ├── config/
+│   │   │   └── siteConfig.js         # Site-level configuration
 │   │   ├── pages/
 │   │   │   ├── AdminDashboardPage.jsx
 │   │   │   ├── AdminLoginPage.jsx
+│   │   │   ├── AdminMessagesPage.jsx
 │   │   │   ├── AdminProjectsPage.jsx
+│   │   │   ├── AdminSettingsPage.jsx
 │   │   │   ├── AdminSkillsPage.jsx
 │   │   │   ├── HomePage.jsx
 │   │   │   └── NotFoundPage.jsx
 │   │   ├── services/
 │   │   │   ├── authService.js        # Auth API calls
 │   │   │   ├── contactService.js     # Contact API calls
+│   │   │   ├── messageService.js     # Message API calls
 │   │   │   ├── projectService.js     # Project API calls
+│   │   │   ├── settingsService.js    # Settings API calls
 │   │   │   └── skillService.js       # Skill API calls
 │   │   ├── utils/
 │   │   │   ├── animations.js         # Framer Motion variants
@@ -281,11 +301,14 @@ portfolio-with-admin-panel/
 ├── server/                           # Express backend
 │   ├── config/
 │   │   ├── db.js                     # MongoDB connection
-│   │   └── env.js                    # Environment config loader
+│   │   ├── env.js                    # Environment config loader
+│   │   └── swagger.js                # Swagger/OpenAPI configuration
 │   ├── controllers/
 │   │   ├── authController.js         # Auth handlers
 │   │   ├── contactController.js      # Contact form handler
+│   │   ├── messageController.js      # Message inbox handlers
 │   │   ├── projectController.js      # Project CRUD handlers
+│   │   ├── settingsController.js     # Site settings handlers
 │   │   └── skillController.js        # Skill CRUD handlers
 │   ├── middlewares/
 │   │   ├── auth.js                   # JWT protect & adminOnly
@@ -294,13 +317,17 @@ portfolio-with-admin-panel/
 │   │   ├── uploadMiddleware.js       # Multer image upload
 │   │   └── validate.js              # express-validator runner
 │   ├── models/
-│   │   ├── User.js                   # User schema (admin)
+│   │   ├── Message.js                # Message schema
 │   │   ├── Project.js                # Project schema
-│   │   └── Skill.js                  # Skill schema
+│   │   ├── Settings.js               # Site settings schema
+│   │   ├── Skill.js                  # Skill schema
+│   │   └── User.js                   # User schema (admin)
 │   ├── routes/
 │   │   ├── authRoutes.js             # Auth endpoints
 │   │   ├── contactRoutes.js          # Contact endpoints
+│   │   ├── messageRoutes.js          # Message endpoints
 │   │   ├── projectRoutes.js          # Project endpoints
+│   │   ├── settingsRoutes.js         # Settings endpoints
 │   │   └── skillRoutes.js            # Skill endpoints
 │   ├── utils/
 │   │   ├── cloudinary.js             # Cloudinary config
@@ -418,6 +445,11 @@ portfolio-with-admin-panel/
 - ✅ Featured project highlighting with custom ordering
 - ✅ Draft/Published status management for projects
 - ✅ Contact form with SMTP email notifications
+- ✅ Admin message inbox with read/unread status tracking
+- ✅ Dynamic site settings management from admin panel
+- ✅ SettingsContext — public portfolio reads settings from API with siteConfig fallback
+- ✅ Unread message badge in admin sidebar with live count
+- ✅ Dashboard message statistics (unread messages stat card)
 - ✅ JWT authentication with protected routes
 - ✅ SEO optimization with react-helmet-async
 - ✅ Scroll progress bar and animated counters

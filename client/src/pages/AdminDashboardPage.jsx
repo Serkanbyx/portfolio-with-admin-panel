@@ -10,6 +10,7 @@ import AdminStats from "../components/admin/AdminStats";
 import { useAuth } from "../contexts/AuthContext";
 import * as projectService from "../services/projectService";
 import * as skillService from "../services/skillService";
+import * as messageService from "../services/messageService";
 
 const formatRelativeDate = (dateString) => {
   const now = Date.now();
@@ -30,6 +31,7 @@ const AdminDashboardPage = () => {
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -37,12 +39,14 @@ const AdminDashboardPage = () => {
     try {
       setIsLoading(true);
       setError(null);
-      const [projectsRes, skillsRes] = await Promise.all([
+      const [projectsRes, skillsRes, messagesRes] = await Promise.all([
         projectService.getAdminProjects(),
         skillService.getSkills(),
+        messageService.getMessages(),
       ]);
       setProjects(projectsRes.data?.data || []);
       setSkills(skillsRes.data?.data || []);
+      setMessages(messagesRes.data?.data || []);
     } catch (err) {
       setError(err.message || "Failed to load dashboard data");
     } finally {
@@ -94,8 +98,8 @@ const AdminDashboardPage = () => {
 
       {/* Stats Cards */}
       {isLoading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 mt-6">
-          {Array.from({ length: 4 }).map((_, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8 mt-6">
+          {Array.from({ length: 5 }).map((_, i) => (
             <Skeleton key={i} className="h-28 w-full rounded-2xl" />
           ))}
         </div>
@@ -103,7 +107,7 @@ const AdminDashboardPage = () => {
 
       {!isLoading && !error && (
         <div className="mt-6">
-          <AdminStats projects={projects} skills={skills} />
+          <AdminStats projects={projects} skills={skills} messages={messages} />
         </div>
       )}
 
