@@ -12,6 +12,14 @@
   [headers.values]
     Content-Type = "application/xml"
 
+# Proxy API requests to Render backend (same-origin cookie fix)
+[[redirects]]
+  from = "/api/*"
+  to = "https://portfolio-with-admin-panel-833u.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+# SPA fallback
 [[redirects]]
   from = "/*"
   to = "/index.html"
