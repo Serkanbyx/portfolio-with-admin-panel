@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const connectDB = require("./config/db");
 const config = require("./config/env");
 const User = require("./models/User");
 
@@ -33,10 +32,11 @@ const seedAdmin = async () => {
 
 // Standalone execution
 if (require.main === module) {
+  const connectDB = require("./config/db");
+
   (async () => {
     try {
       await connectDB();
-      await seedAdmin();
     } catch (error) {
       console.error("Seed failed:", error.message);
     } finally {

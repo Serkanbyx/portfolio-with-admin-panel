@@ -7,7 +7,7 @@ import { SOCIAL_LINKS } from "../../utils/constants";
 
 const HERO_CONTENT = {
   greeting: "Hello, I'm",
-  name: "Serkan Akış",
+  name: "Your Name",
   role: "Full-Stack Developer",
   tagline:
     "I build modern web applications with clean code and great user experiences.",

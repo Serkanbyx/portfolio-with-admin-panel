@@ -102,18 +102,21 @@ const createProject = async (req, res, next) => {
 
 const updateProject = async (req, res, next) => {
   try {
-    const updates = pickFields(req.body, ALLOWED_FIELDS);
-
-    const project = await Project.findByIdAndUpdate(req.params.id, updates, {
-      new: true,
-      runValidators: true,
-    });
+    const project = await Project.findById(req.params.id);
 
     if (!project) {
       return res
         .status(404)
         .json({ success: false, message: "Project not found" });
     }
+
+    const updates = pickFields(req.body, ALLOWED_FIELDS);
+
+    for (const [key, value] of Object.entries(updates)) {
+      project[key] = value;
+    }
+
+    await project.save();
 
     res.json({ success: true, data: project });
   } catch (error) {
