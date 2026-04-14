@@ -2,8 +2,6 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const mongoSanitize = require("express-mongo-sanitize");
-const hpp = require("hpp");
-
 const config = require("./config/env");
 const connectDB = require("./config/db");
 const { globalLimiter } = require("./middlewares/rateLimiter");
@@ -28,11 +26,12 @@ app.use(cors({ origin: config.clientUrl, credentials: true }));
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
-// NoSQL injection prevention
-app.use(mongoSanitize());
-
-// HTTP parameter pollution protection
-app.use(hpp());
+// NoSQL injection prevention (Express 5 compatible — req.query is read-only)
+app.use((req, _res, next) => {
+  if (req.body) mongoSanitize.sanitize(req.body);
+  if (req.params) mongoSanitize.sanitize(req.params);
+  next();
+});
 
 // Global rate limiter
 app.use("/api", globalLimiter);
