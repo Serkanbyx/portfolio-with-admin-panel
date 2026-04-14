@@ -9,7 +9,7 @@ import SkillForm from "../components/admin/SkillForm";
 import * as skillService from "../services/skillService";
 
 const AdminSkillsPage = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [skills, setSkills] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingSkill, setEditingSkill] = useState(null);
@@ -36,8 +36,9 @@ const AdminSkillsPage = () => {
     if (searchParams.get("action") === "new") {
       setEditingSkill(null);
       setIsFormOpen(true);
+      setSearchParams({}, { replace: true });
     }
-  }, [searchParams]);
+  }, [searchParams, setSearchParams]);
 
   const handleAddNew = () => {
     setEditingSkill(null);

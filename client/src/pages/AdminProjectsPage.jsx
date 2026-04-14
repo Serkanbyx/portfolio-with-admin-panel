@@ -9,7 +9,7 @@ import ProjectForm from "../components/admin/ProjectForm";
 import * as projectService from "../services/projectService";
 
 const AdminProjectsPage = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [projects, setProjects] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
@@ -36,8 +36,9 @@ const AdminProjectsPage = () => {
     if (searchParams.get("action") === "new") {
       setEditingProject(null);
       setIsFormOpen(true);
+      setSearchParams({}, { replace: true });
     }
-  }, [searchParams]);
+  }, [searchParams, setSearchParams]);
 
   const handleAddNew = () => {
     setEditingProject(null);

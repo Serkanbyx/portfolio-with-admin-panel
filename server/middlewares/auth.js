@@ -4,15 +4,20 @@ const User = require("../models/User");
 
 const protect = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
+    let token = req.cookies?.token;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!token) {
+      const authHeader = req.headers.authorization;
+      if (authHeader?.startsWith("Bearer ")) {
+        token = authHeader.split(" ")[1];
+      }
+    }
+
+    if (!token) {
       return res
         .status(401)
         .json({ success: false, message: "Authentication required" });
     }
-
-    const token = authHeader.split(" ")[1];
 
     const decoded = jwt.verify(token, config.jwtSecret);
 

@@ -19,22 +19,10 @@ const isRetryableRequest = (config) =>
 const axiosInstance = axios.create({
   baseURL,
   timeout: 30000,
+  withCredentials: true,
   headers: { "Content-Type": "application/json" },
 });
 
-// Attach JWT token to every outgoing request
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("portfolio_token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error),
-);
-
-// Retry on cold-start failures (5xx) for public GET requests
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -57,12 +45,9 @@ axiosInstance.interceptors.response.use(
       }
     }
 
-    if (error.response?.status === 401) {
-      localStorage.removeItem("portfolio_token");
-
-      if (window.location.pathname.startsWith("/admin")) {
-        window.location.href = "/admin/login";
-      }
+    const { pathname } = window.location;
+    if (status === 401 && pathname.startsWith("/admin") && pathname !== "/admin/login") {
+      window.location.href = "/admin/login";
     }
 
     const message =

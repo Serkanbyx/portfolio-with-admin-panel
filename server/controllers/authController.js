@@ -1,5 +1,8 @@
 const User = require("../models/User");
-const { generateToken } = require("../utils/helpers");
+const config = require("../config/env");
+const { generateToken, parseDuration, getCookieOptions } = require("../utils/helpers");
+
+const cookieMaxAge = parseDuration(config.jwtExpiresIn);
 
 const login = async (req, res, next) => {
   try {
@@ -15,14 +18,20 @@ const login = async (req, res, next) => {
 
     const token = generateToken({ id: user._id, role: user.role });
 
+    res.cookie("token", token, getCookieOptions(cookieMaxAge));
+
     res.json({
       success: true,
-      token,
       user: { id: user._id, email: user.email, role: user.role },
     });
   } catch (error) {
     next(error);
   }
+};
+
+const logout = (_req, res) => {
+  res.clearCookie("token", getCookieOptions(0));
+  res.json({ success: true, message: "Logged out successfully" });
 };
 
 const getMe = (req, res) => {
@@ -32,4 +41,4 @@ const getMe = (req, res) => {
   });
 };
 
-module.exports = { login, getMe };
+module.exports = { login, logout, getMe };

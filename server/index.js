@@ -1,6 +1,7 @@
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const mongoSanitize = require("express-mongo-sanitize");
 const swaggerUi = require("swagger-ui-express");
 const config = require("./config/env");
@@ -38,6 +39,9 @@ app.disable("x-powered-by");
 
 // CORS — strict origin
 app.use(cors({ origin: config.clientUrl, credentials: true }));
+
+// Cookie parser
+app.use(cookieParser());
 
 // Body parsers with size limit
 app.use(express.json({ limit: "10kb" }));

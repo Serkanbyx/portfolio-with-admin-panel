@@ -4,32 +4,21 @@ import * as authService from "../services/authService";
 
 const AuthContext = createContext(null);
 
-const TOKEN_KEY = "portfolio_token";
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY));
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    localStorage.removeItem("portfolio_token");
+  }, []);
+
   const checkAuth = useCallback(async () => {
-    const storedToken = localStorage.getItem(TOKEN_KEY);
-
-    if (!storedToken) {
-      setUser(null);
-      setToken(null);
-      setLoading(false);
-      return;
-    }
-
     try {
       const { data } = await authService.getMe();
       setUser(data.user);
-      setToken(storedToken);
     } catch {
-      localStorage.removeItem(TOKEN_KEY);
       setUser(null);
-      setToken(null);
     } finally {
       setLoading(false);
     }
@@ -40,29 +29,26 @@ export const AuthProvider = ({ children }) => {
   }, [checkAuth]);
 
   const login = useCallback(async (email, password) => {
-    try {
-      const { data } = await authService.login(email, password);
-      localStorage.setItem(TOKEN_KEY, data.token);
-      setToken(data.token);
-      setUser(data.user);
-      return data.user;
-    } catch (error) {
-      throw new Error(error.message || "Login failed");
-    }
+    const { data } = await authService.login(email, password);
+    setUser(data.user);
+    return data.user;
   }, []);
 
-  const logout = useCallback(() => {
-    localStorage.removeItem(TOKEN_KEY);
+  const logout = useCallback(async () => {
+    try {
+      await authService.logout();
+    } catch {
+      /* cookie cleared server-side; proceed regardless */
+    }
     setUser(null);
-    setToken(null);
     navigate("/admin/login");
   }, [navigate]);
 
   const isAdmin = user?.role === "admin";
 
   const value = useMemo(
-    () => ({ user, token, loading, login, logout, isAdmin }),
-    [user, token, loading, login, logout, isAdmin]
+    () => ({ user, loading, login, logout, isAdmin }),
+    [user, loading, login, logout, isAdmin]
   );
 
   return (
