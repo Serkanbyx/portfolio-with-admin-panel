@@ -17,6 +17,7 @@ import GradientText from "../components/ui/GradientText";
 import Spinner from "../components/ui/Spinner";
 import { useAuth } from "../contexts/AuthContext";
 import { scaleIn, fadeInDown } from "../utils/animations";
+import siteConfig from "../config/siteConfig";
 
 const INPUT_CLASSES =
   "w-full bg-dark-800/50 border border-dark-700 rounded-xl pl-11 pr-4 py-3 text-dark-100 placeholder:text-dark-500 focus:border-primary-500 focus:ring-1 focus:ring-primary-500/50 focus:outline-none transition-all duration-200";
@@ -78,7 +79,7 @@ const AdminLoginPage = () => {
   return (
     <>
       <Helmet>
-        <title>Admin Login | Portfolio</title>
+        <title>{`Admin Login | ${siteConfig.name}`}</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 

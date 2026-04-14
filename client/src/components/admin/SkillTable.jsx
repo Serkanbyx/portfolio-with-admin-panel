@@ -61,6 +61,7 @@ const SkillTable = ({ skills, isLoading, onEdit, onDelete, onAddNew }) => {
           Add your first skill to showcase your expertise.
         </p>
         <button
+          type="button"
           onClick={onAddNew}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-500 text-white font-medium text-sm hover:bg-primary-600 transition-colors"
         >
@@ -135,6 +136,7 @@ const SkillTable = ({ skills, isLoading, onEdit, onDelete, onAddNew }) => {
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-1">
                         <button
+                          type="button"
                           onClick={() => onEdit(skill)}
                           className="p-2 rounded-lg text-dark-400 hover:text-primary-400 hover:bg-dark-700/50 transition-colors"
                           aria-label={`Edit ${skill.name}`}
@@ -142,6 +144,7 @@ const SkillTable = ({ skills, isLoading, onEdit, onDelete, onAddNew }) => {
                           <FiEdit2 className="w-4 h-4" />
                         </button>
                         <button
+                          type="button"
                           onClick={() => setDeleteTarget(skill)}
                           className="p-2 rounded-lg text-dark-400 hover:text-error-500 hover:bg-dark-700/50 transition-colors"
                           aria-label={`Delete ${skill.name}`}

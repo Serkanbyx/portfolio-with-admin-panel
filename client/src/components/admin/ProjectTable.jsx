@@ -58,6 +58,7 @@ const ProjectTable = ({
           Create your first project to get started.
         </p>
         <button
+          type="button"
           onClick={onAddNew}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-500 text-white font-medium text-sm hover:bg-primary-600 transition-colors"
         >
@@ -122,6 +123,7 @@ const ProjectTable = ({
                   {/* Featured */}
                   <td className="px-4 py-3 text-center">
                     <button
+                      type="button"
                       onClick={() => onToggleFeatured(project)}
                       className="p-1.5 rounded-lg hover:bg-dark-700/50 transition-colors"
                       aria-label={
@@ -149,6 +151,7 @@ const ProjectTable = ({
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
                       <button
+                        type="button"
                         onClick={() => onEdit(project)}
                         className="p-2 rounded-lg text-dark-400 hover:text-primary-400 hover:bg-dark-700/50 transition-colors"
                         aria-label={`Edit ${project.title}`}
@@ -156,6 +159,7 @@ const ProjectTable = ({
                         <FiEdit2 className="w-4 h-4" />
                       </button>
                       <button
+                        type="button"
                         onClick={() => setDeleteTarget(project)}
                         className="p-2 rounded-lg text-dark-400 hover:text-error-500 hover:bg-dark-700/50 transition-colors"
                         aria-label={`Delete ${project.title}`}

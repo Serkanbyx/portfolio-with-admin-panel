@@ -78,6 +78,7 @@ const AdminDashboardPage = () => {
           <FiAlertCircle className="mx-auto text-red-400 mb-4" size={40} />
           <p className="text-red-400 mb-4">{error}</p>
           <button
+            type="button"
             onClick={fetchData}
             className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-500 text-white text-sm px-5 py-2.5 rounded-lg transition-colors"
           >

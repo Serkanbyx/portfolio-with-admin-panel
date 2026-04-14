@@ -109,6 +109,7 @@ const Hero = () => {
         {/* CTA Buttons */}
         <motion.div className="flex gap-4 justify-center mb-12" variants={fadeInUp}>
           <motion.button
+            type="button"
             onClick={() => handleScrollTo("#projects")}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
@@ -119,6 +120,7 @@ const Hero = () => {
             View Projects
           </motion.button>
           <motion.button
+            type="button"
             onClick={() => handleScrollTo("#contact")}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}

@@ -42,6 +42,7 @@ const SidebarContent = ({ onClose }) => {
         </div>
         {onClose && (
           <button
+            type="button"
             onClick={onClose}
             className="lg:hidden text-dark-400 hover:text-dark-100 transition-colors"
             aria-label="Close menu"
@@ -80,6 +81,7 @@ const SidebarContent = ({ onClose }) => {
         </Link>
 
         <button
+          type="button"
           onClick={logout}
           className="flex items-center gap-3 py-3 px-4 rounded-lg text-dark-400 hover:text-red-400 hover:bg-dark-800/50 transition-colors w-full"
         >
@@ -106,6 +108,7 @@ const AdminLayout = () => {
       {/* Mobile Top Bar */}
       <div className="lg:hidden flex items-center gap-3 p-4 bg-dark-900 border-b border-dark-800 sticky top-0 z-20">
         <button
+          type="button"
           onClick={() => setIsMobileOpen(true)}
           className="text-dark-400 hover:text-dark-100 transition-colors"
           aria-label="Open menu"

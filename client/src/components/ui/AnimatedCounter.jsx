@@ -11,7 +11,7 @@ const AnimatedCounter = ({
 }) => {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
   const hasAnimated = useRef(false);
 
   const animate = useCallback(() => {
@@ -38,7 +38,10 @@ const AnimatedCounter = ({
   }, [target, duration]);
 
   useEffect(() => {
-    if (isInView) animate();
+    if (!isInView) return;
+    // Defer to next frame so the DOM has settled after hash navigation
+    const frameId = requestAnimationFrame(() => animate());
+    return () => cancelAnimationFrame(frameId);
   }, [isInView, animate]);
 
   return (

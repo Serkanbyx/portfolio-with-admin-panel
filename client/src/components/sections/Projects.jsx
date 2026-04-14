@@ -85,6 +85,7 @@ const Projects = () => {
                 <FiAlertCircle className="mx-auto text-red-400 mb-4" size={48} />
                 <p className="text-red-400 mb-4">Unable to load projects</p>
                 <motion.button
+                  type="button"
                   onClick={fetchProjects}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.97 }}

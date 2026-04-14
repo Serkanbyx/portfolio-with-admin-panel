@@ -99,6 +99,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Toggle */}
         <button
+          type="button"
           className="lg:hidden relative z-50 w-10 h-10 flex items-center justify-center text-dark-300 hover:text-dark-100 transition-colors"
           onClick={() => setIsMobileMenuOpen((prev) => !prev)}
           aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}

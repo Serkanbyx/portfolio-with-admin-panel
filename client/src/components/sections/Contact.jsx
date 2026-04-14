@@ -62,11 +62,12 @@ const MESSAGE_MAX = 1000;
 const INPUT_BASE_CLASSES =
   "w-full bg-dark-800/50 border rounded-xl px-4 py-3 text-dark-100 placeholder:text-dark-500 focus:ring-1 focus:outline-none transition-all duration-200";
 
-const getInputStateClasses = (fieldName, errors, touched) => {
+const getInputStateClasses = (fieldName, errors, touched, formData) => {
   if (touched[fieldName] && errors[fieldName]) {
     return "border-error-500 focus:border-error-500 focus:ring-error-500/50";
   }
-  if (touched[fieldName] && !errors[fieldName]) {
+  const hasAllErrors = Object.values(errors).every((e) => e === "");
+  if (touched[fieldName] && !errors[fieldName] && formData[fieldName]?.trim() && hasAllErrors) {
     return "border-success-500/50 focus:border-primary-500 focus:ring-primary-500/50";
   }
   return "border-dark-700 focus:border-primary-500 focus:ring-primary-500/50";
@@ -336,6 +337,7 @@ const ContactForm = ({
         onBlur={onBlur}
         errors={errors}
         touched={touched}
+        formData={formData}
       />
     </motion.div>
 
@@ -354,6 +356,7 @@ const ContactForm = ({
         onBlur={onBlur}
         errors={errors}
         touched={touched}
+        formData={formData}
       />
     </motion.div>
 
@@ -371,7 +374,7 @@ const ContactForm = ({
         disabled={isSubmitting}
         onChange={onChange}
         onBlur={onBlur}
-        className={`${INPUT_BASE_CLASSES} ${getInputStateClasses("message", errors, touched)} resize-y`}
+        className={`${INPUT_BASE_CLASSES} ${getInputStateClasses("message", errors, touched, formData)} resize-y`}
       />
       <div className="flex justify-between items-center mt-1">
         <InlineError show={touched.message && errors.message} message={errors.message} />
@@ -433,6 +436,7 @@ const FormField = ({
   onBlur,
   errors,
   touched,
+  formData,
 }) => (
   <div>
     <label htmlFor={name} className="text-sm font-medium text-dark-300 mb-2 block">
@@ -447,7 +451,7 @@ const FormField = ({
       disabled={disabled}
       onChange={onChange}
       onBlur={onBlur}
-      className={`${INPUT_BASE_CLASSES} ${getInputStateClasses(name, errors, touched)}`}
+      className={`${INPUT_BASE_CLASSES} ${getInputStateClasses(name, errors, touched, formData)}`}
     />
     <InlineError show={touched[name] && errors[name]} message={errors[name]} />
   </div>
@@ -490,6 +494,7 @@ const SuccessMessage = ({ onReset }) => (
     </p>
 
     <motion.button
+      type="button"
       onClick={onReset}
       whileTap={{ scale: 0.97 }}
       transition={{ type: "spring", stiffness: 400, damping: 17 }}

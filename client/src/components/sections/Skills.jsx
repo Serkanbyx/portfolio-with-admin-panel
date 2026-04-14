@@ -133,6 +133,7 @@ const Skills = () => {
                 <FiAlertCircle className="mx-auto text-red-400 mb-4" size={48} />
                 <p className="text-red-400 mb-4">Unable to load skills</p>
                 <motion.button
+                  type="button"
                   onClick={fetchSkills}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.97 }}

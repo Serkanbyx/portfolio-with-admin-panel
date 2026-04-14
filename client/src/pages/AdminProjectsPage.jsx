@@ -81,6 +81,7 @@ const AdminProjectsPage = () => {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold text-dark-50">Manage Projects</h1>
         <button
+          type="button"
           onClick={handleAddNew}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-500 text-white font-medium text-sm hover:bg-primary-600 transition-colors"
         >
