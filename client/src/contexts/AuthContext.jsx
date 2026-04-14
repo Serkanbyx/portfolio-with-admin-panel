@@ -28,6 +28,13 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, [checkAuth]);
 
+  useEffect(() => {
+    if (!user) return;
+
+    const interval = setInterval(checkAuth, 15 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [user, checkAuth]);
+
   const login = useCallback(async (email, password) => {
     const { data } = await authService.login(email, password);
     setUser(data.user);

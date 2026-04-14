@@ -7,6 +7,7 @@ import GlassCard from "../components/ui/GlassCard";
 import Skeleton from "../components/ui/Skeleton";
 import StatusBadge from "../components/ui/StatusBadge";
 import AdminStats from "../components/admin/AdminStats";
+import { useAuth } from "../contexts/AuthContext";
 import * as projectService from "../services/projectService";
 import * as skillService from "../services/skillService";
 
@@ -26,6 +27,7 @@ const formatRelativeDate = (dateString) => {
 };
 
 const AdminDashboardPage = () => {
+  const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -69,7 +71,9 @@ const AdminDashboardPage = () => {
 
       <div>
         <h1 className="text-2xl font-bold text-dark-50">Dashboard</h1>
-        <p className="text-dark-400 mt-1">Welcome back! 👋</p>
+        <p className="text-dark-400 mt-1">
+          Welcome back{user?.email ? `, ${user.email}` : ""}! 👋
+        </p>
       </div>
 
       {/* Error State */}
