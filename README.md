@@ -31,7 +31,7 @@
 | Backend    | Node.js, Express 5, MongoDB, Mongoose, JWT                              |
 | Services   | Cloudinary (images), Nodemailer (email)                                 |
 | Security   | Helmet, CORS, Rate Limiting, express-mongo-sanitize, hpp, bcryptjs      |
-| Deployment | Railway (backend), Vercel (frontend)                                    |
+| Deployment | Render (backend), Netlify (frontend), MongoDB Atlas                     |
 
 ## Getting Started
 
@@ -82,24 +82,24 @@ Navigate to `/admin/login` and use the `ADMIN_EMAIL` / `ADMIN_PASSWORD` credenti
 
 ## API Endpoints
 
-| Method | Path                      | Auth      | Description          |
-| ------ | ------------------------- | --------- | -------------------- |
-| POST   | `/api/auth/login`         | No        | Admin login          |
-| GET    | `/api/auth/me`            | JWT       | Get current user     |
+| Method | Path                      | Auth      | Description            |
+| ------ | ------------------------- | --------- | ---------------------- |
+| POST   | `/api/auth/login`         | No        | Admin login            |
+| GET    | `/api/auth/me`            | JWT       | Get current user       |
 | GET    | `/api/projects`           | No        | Get published projects |
-| GET    | `/api/projects/:slug`     | No        | Get project by slug  |
-| GET    | `/api/projects/admin/all` | JWT+Admin | Get all projects     |
-| POST   | `/api/projects`           | JWT+Admin | Create project       |
-| PUT    | `/api/projects/:id`       | JWT+Admin | Update project       |
-| DELETE | `/api/projects/:id`       | JWT+Admin | Delete project       |
-| POST   | `/api/projects/:id/image` | JWT+Admin | Upload project image |
-| DELETE | `/api/projects/:id/image` | JWT+Admin | Delete project image |
-| GET    | `/api/skills`             | No        | Get all skills       |
-| POST   | `/api/skills`             | JWT+Admin | Create skill         |
-| PUT    | `/api/skills/:id`         | JWT+Admin | Update skill         |
-| DELETE | `/api/skills/:id`         | JWT+Admin | Delete skill         |
-| POST   | `/api/contact`            | No        | Send contact message |
-| GET    | `/api/health`             | No        | Health check         |
+| GET    | `/api/projects/:slug`     | No        | Get project by slug    |
+| GET    | `/api/projects/admin/all` | JWT+Admin | Get all projects       |
+| POST   | `/api/projects`           | JWT+Admin | Create project         |
+| PUT    | `/api/projects/:id`       | JWT+Admin | Update project         |
+| DELETE | `/api/projects/:id`       | JWT+Admin | Delete project         |
+| POST   | `/api/projects/:id/image` | JWT+Admin | Upload project image   |
+| DELETE | `/api/projects/:id/image` | JWT+Admin | Delete project image   |
+| GET    | `/api/skills`             | No        | Get all skills         |
+| POST   | `/api/skills`             | JWT+Admin | Create skill           |
+| PUT    | `/api/skills/:id`         | JWT+Admin | Update skill           |
+| DELETE | `/api/skills/:id`         | JWT+Admin | Delete skill           |
+| POST   | `/api/contact`            | No        | Send contact message   |
+| GET    | `/api/health`             | No        | Health check           |
 
 ## Security
 
@@ -130,7 +130,7 @@ Navigate to `/admin/login` and use the `ADMIN_EMAIL` / `ADMIN_PASSWORD` credenti
 │   │   ├── pages/          # Page components
 │   │   ├── services/       # API service functions
 │   │   └── utils/          # Constants, animations
-│   ├── vercel.json         # SPA rewrite rules
+│   ├── netlify.toml        # SPA redirect & build config
 │   └── vite.config.js
 │
 ├── server/                 # Express backend
@@ -149,38 +149,61 @@ Navigate to `/admin/login` and use the `ADMIN_EMAIL` / `ADMIN_PASSWORD` credenti
 
 ## Deployment
 
-### Backend — Railway
+### MongoDB Atlas Setup
 
-1. Create a new project and connect your GitHub repository.
-2. Set root directory to `/server` and start command to `npm start`.
+1. Create a free cluster on [MongoDB Atlas](https://www.mongodb.com/atlas).
+2. Create a database user with a **strong generated password** (different from `ADMIN_PASSWORD`).
+3. Network Access: add `0.0.0.0/0` to allow connections from Render.
+4. Get the connection string (`mongodb+srv://...`). **Never commit it.**
+
+### Backend — Render
+
+1. Create a new **Web Service** on [Render](https://render.com) and connect your GitHub repository.
+2. Configure the service:
+   - **Root Directory:** `server`
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+   - **Environment:** `Node`
 3. Add environment variables:
 
-| Variable           | Value                                      |
-| ------------------ | ------------------------------------------ |
-| `NODE_ENV`         | `production`                               |
-| `MONGO_URI`        | MongoDB Atlas connection string            |
+| Variable           | Value                                       |
+| ------------------ | ------------------------------------------- |
+| `NODE_ENV`         | `production`                                |
+| `MONGO_URI`        | MongoDB Atlas connection string             |
 | `JWT_SECRET`       | Random 64-char hex (`openssl rand -hex 32`) |
-| `JWT_EXPIRES_IN`   | `7d`                                       |
-| `CLIENT_URL`       | Vercel frontend URL                        |
-| `CLOUDINARY_*`     | Cloudinary credentials                     |
-| `ADMIN_EMAIL`      | Admin email address                        |
-| `ADMIN_PASSWORD`   | Strong password (min 8 chars)              |
-| `SMTP_*`           | SMTP credentials                           |
-| `CONTACT_TO_EMAIL` | Contact form recipient email               |
+| `JWT_EXPIRES_IN`   | `7d`                                        |
+| `CLIENT_URL`       | Netlify frontend URL                        |
+| `CLOUDINARY_*`     | Cloudinary credentials                      |
+| `ADMIN_EMAIL`      | Admin email address                         |
+| `ADMIN_PASSWORD`   | Strong password (min 8 chars)               |
+| `SMTP_*`           | SMTP credentials                            |
+| `CONTACT_TO_EMAIL` | Contact form recipient email                |
 
-4. Deploy and verify: `GET /api/health`.
+4. Deploy and verify: `GET https://your-app.onrender.com/api/health`.
+5. Run `npm run seed` via Render Shell tab if needed.
 
-### Frontend — Vercel
+### Frontend — Netlify
 
-1. Create a new project and connect your GitHub repository.
-2. Set root directory to `/client`, framework preset to **Vite**, build command to `npm run build`, output directory to `dist`.
-3. Add environment variable: `VITE_API_URL` = Railway URL + `/api`.
+1. Create a new site on [Netlify](https://www.netlify.com) and connect your GitHub repository.
+2. Configure the build:
+   - **Base Directory:** `client`
+   - **Build Command:** `npm run build`
+   - **Publish Directory:** `client/dist`
+3. Add environment variable: `VITE_API_URL` = Render URL + `/api` (e.g. `https://your-app.onrender.com/api`).
 4. Deploy.
+
+> **Note:** SPA client-side routing is handled by `client/netlify.toml` — all routes redirect to `index.html`.
 
 ### Post-Deployment
 
-- Update `CLIENT_URL` on Railway to your exact Vercel URL (no trailing slash).
+- Update `CLIENT_URL` on Render to your exact Netlify URL (no trailing slash).
 - Redeploy the backend for CORS to take effect.
+
+### Custom Domain (Optional)
+
+- **Netlify:** Site Settings → Domain Management → Add custom domain → Configure DNS.
+- **Render:** Settings → Custom Domains → Add domain (e.g. `api.yourname.dev`) → Configure DNS.
+- Update `VITE_API_URL` and `CLIENT_URL` accordingly.
 
 ## Environment Variables
 
