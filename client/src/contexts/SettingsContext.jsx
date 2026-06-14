@@ -31,33 +31,29 @@ export const SettingsProvider = ({ children }) => {
 
     if (!apiSettings) return base;
 
-    if (apiSettings.name && apiSettings.name !== "Your Name") {
-      base.name = apiSettings.name;
+    // Only customized (non-empty) admin values override the siteConfig
+    // defaults; empty fields fall back to siteConfig.
+    const SCALAR_FIELDS = [
+      "name",
+      "role",
+      "greeting",
+      "tagline",
+      "location",
+      "email",
+      "profileImageUrl",
+    ];
+
+    for (const field of SCALAR_FIELDS) {
+      if (apiSettings[field]) base[field] = apiSettings[field];
     }
-    if (apiSettings.role && apiSettings.role !== "Full-Stack Developer") {
-      base.role = apiSettings.role;
-    }
-    if (apiSettings.greeting && apiSettings.greeting !== "Hello, I'm") {
-      base.greeting = apiSettings.greeting;
-    }
-    if (apiSettings.tagline && apiSettings.tagline !== siteConfig.tagline) {
-      base.tagline = apiSettings.tagline;
-    }
-    if (apiSettings.location && apiSettings.location !== "Istanbul, Turkey") {
-      base.location = apiSettings.location;
-    }
-    if (apiSettings.email && apiSettings.email !== "your.email@example.com") {
-      base.email = apiSettings.email;
-    }
-    if (apiSettings.profileImageUrl) {
-      base.profileImageUrl = apiSettings.profileImageUrl;
-    }
+
     if (apiSettings.bio?.length > 0) {
       base.bio = apiSettings.bio;
     }
+
     if (apiSettings.social) {
       const apiSocial = Object.fromEntries(
-        Object.entries(apiSettings.social).filter(([, v]) => v)
+        Object.entries(apiSettings.social).filter(([, value]) => value)
       );
       if (Object.keys(apiSocial).length > 0) {
         base.social = { ...base.social, ...apiSocial };
