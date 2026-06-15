@@ -58,9 +58,52 @@
 
 ## Screenshots
 
-The best way to experience the UI is the [live deployment](https://portfolio-with-admin-panel.netlify.app/) — the public portfolio is open, and the admin panel lives at `/admin/login`.
+Captured from the [live deployment](https://portfolio-with-admin-panel.netlify.app/). The first row is the public portfolio; the remaining rows are the JWT-secured admin panel.
 
-> To showcase the project visually, capture screenshots from the live site (e.g. landing, projects, skills, contact, admin dashboard, project editor, message inbox, settings) and drop them into `assets/screenshots/` as `kebab-case.png`. They will render in a grid here.
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/hero.png"><img src="./assets/screenshots/hero.png" alt="Hero" /></a>
+      <sub><b>Hero</b><br/>Landing with greeting, role & CTAs</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/about.png"><img src="./assets/screenshots/about.png" alt="About" /></a>
+      <sub><b>About</b><br/>Bio paragraphs & animated stats</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/contact.png"><img src="./assets/screenshots/contact.png" alt="Contact" /></a>
+      <sub><b>Contact</b><br/>Validated form & social links</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/admin-login.png"><img src="./assets/screenshots/admin-login.png" alt="Admin login" /></a>
+      <sub><b>Admin login</b><br/>Secure entry to the panel</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/admin-dashboard.png"><img src="./assets/screenshots/admin-dashboard.png" alt="Admin dashboard" /></a>
+      <sub><b>Dashboard</b><br/>Project, skill & message stats</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/admin-projects.png"><img src="./assets/screenshots/admin-projects.png" alt="Manage projects" /></a>
+      <sub><b>Projects</b><br/>CRUD table with status & order</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/admin-skills.png"><img src="./assets/screenshots/admin-skills.png" alt="Manage skills" /></a>
+      <sub><b>Skills</b><br/>Categorized proficiency levels</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/admin-messages.png"><img src="./assets/screenshots/admin-messages.png" alt="Message inbox" /></a>
+      <sub><b>Messages</b><br/>Inbox with read/unread state</sub>
+    </td>
+    <td align="center" width="33%">
+      <a href="./assets/screenshots/admin-settings.png"><img src="./assets/screenshots/admin-settings.png" alt="Site settings" /></a>
+      <sub><b>Settings</b><br/>Dynamic site configuration</sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
